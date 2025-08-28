@@ -1,0 +1,16 @@
+{
+  "name": "learning-roadmap-monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:api": "pnpm --filter api start",
+    "dev:api": "pnpm --filter api dev",
+    "start:web": "pnpm --filter web start",
+    "dev:web": "pnpm --filter web dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true
+}
