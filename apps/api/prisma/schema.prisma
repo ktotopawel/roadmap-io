@@ -17,16 +17,18 @@ datasource db {
 model Goal {
   id        String   @id @default(cuid())
   title     String
-  parentId  String? // For hierarchical goals (null = top-level)
+  parentId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tasks     Task[] // One-to-many relationship
+  tasks     Task[]
+  parent    Goal?    @relation("GoalToSubGoals", fields: [parentId], references: [id])
+  subGoals  Goal[]   @relation("GoalToSubGoals")
 }
 
 model Task {
   id     String @id @default(cuid())
   goalId String
   title  String
-  status String @default("TODO") // TODO, IN_PROGRESS, DONE
+  status String @default("TODO")
   goal   Goal   @relation(fields: [goalId], references: [id])
 }
