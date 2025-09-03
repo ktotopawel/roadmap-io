@@ -6,9 +6,9 @@ import { TaskSchema } from './task.types';
 type Goal = {
   id: string;
   title: string;
-  parentId?: string;
-  createdAt: string;
-  updatedAt: string;
+  parentId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
   tasks: z.infer<typeof TaskSchema>[];
   roadmapId: string;
   subgoals: Goal[];
@@ -17,9 +17,9 @@ type Goal = {
 const GoalSchema: z.ZodSchema<Goal> = z.object({
   id: z.string().cuid(),
   title: z.string().min(1, "The title can't be empty"),
-  parentId: z.string().cuid().optional(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  parentId: z.string().cuid().nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
   tasks: z.array(TaskSchema),
   roadmapId: z.string().cuid(),
   subgoals: z.lazy(() => z.array(GoalSchema)),

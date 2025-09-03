@@ -30,6 +30,16 @@ class RoadmapController {
       return res.status(ServerStatuses.BACKEND_ERROR).send({ error: 'Failed to create roadmap' });
     }
   };
+
+  public getRoadmaps = async (req: Request, res: Response) => {
+    try {
+      const roadmaps = await this.roadmapService.getRoadmaps();
+      return res.status(ServerStatuses.OK).send(roadmaps);
+    } catch (e) {
+      console.error('Error fetching roadmaps. Error: ', e);
+      return res.status(ServerStatuses.BACKEND_ERROR).send({ error: 'Failed to fetch roadmaps' });
+    }
+  };
 }
 
 export default RoadmapController;
