@@ -1,15 +1,15 @@
 import * as z from 'zod';
-import { goal } from './goal.types';
+import { GoalSchema } from './goal.types';
 
-export const roadmap = z.object({
+export const RoadmapSchema = z.object({
   id: z.string().cuid(),
   title: z.string().min(1, "The title can't be empty"),
   createdAt: z.date(),
   updatedAt: z.date(),
-  goals: z.array(goal),
+  goals: z.array(GoalSchema),
 });
 
-export type Roadmap = z.infer<typeof roadmap>;
+export type Roadmap = z.infer<typeof RoadmapSchema>;
 
 export const roadmapPayload = z.object({
   title: z.string().min(1, "The title can't be empty"),

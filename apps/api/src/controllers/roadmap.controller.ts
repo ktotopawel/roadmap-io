@@ -1,7 +1,7 @@
 import RoadmapService from '../services/roadmap.service';
 import ServerStatuses from '../config/serverStatuses';
 import { Request, Response } from 'express';
-import { roadmapPayload } from '@learning-roadmap/types/src';
+import { roadmapPayload } from '@roadmap-io/types/src';
 
 class RoadmapController {
   private roadmapService: RoadmapService;

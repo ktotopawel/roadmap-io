@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@learning-roadmap/types": "workspace:*",
+    "@reduxjs/toolkit": "^2.9.0",
+    "@roadmap-io/types": "workspace:*",
+    "axios": "^1.11.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-flow": "^1.0.3",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.8.2"
   },
   "devDependencies": {

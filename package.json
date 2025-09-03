@@ -8,7 +8,7 @@
     "dev:api": "pnpm --filter api dev",
     "start:web": "pnpm --filter web start",
     "dev:web": "pnpm --filter web dev",
-    "dev": "concurrently \"pnpm --filter ./apps/api run dev\" \"pnpm --filter ./apps/web run dev\" -n \"api,web\" -c \"yellow,blue\"",
+    "dev": "concurrently \"pnpm --filter ./apps/api run dev\" \"pnpm --filter ./apps/web run dev\" \"pnpm --filter ./packages/types run dev\" -n \"api,web,types\" -c \"yellow,blue,cyan\"",
     "start": "concurrently \"pnpm --filter ./apps/api run start\" \"pnpm --filter ./apps/web run start\" -n \"api,web\" -c \"yellow,blue\""
   },
   "keywords": [],
@@ -24,6 +24,11 @@
     "prettier": "^3.6.2"
   },
   "dependencies": {
-    "concurrently": "^9.2.1"
-  }
+    "concurrently": "^9.2.1",
+    "zod": "^3.25.76"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
