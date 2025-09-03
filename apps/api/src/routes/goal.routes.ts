@@ -1,6 +1,6 @@
-import GoalController from '../controllers/goal.controller';
 import express from 'express';
 import ServerRoutes from '../config/serverRoutes';
+import { GoalController } from '../controllers';
 
 const router = express.Router();
 

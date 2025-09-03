@@ -1,12 +1,13 @@
 import prisma from '../../prisma/prisma';
 
 class GoalService {
-  public async createGoal(title: string) {
+  public async createGoal(title: string, roadmapId: string) {
     try {
       return await prisma.goal.create({
         data: {
           title: title,
           parentId: null,
+          roadmapId: roadmapId,
         },
       });
     } catch (error) {

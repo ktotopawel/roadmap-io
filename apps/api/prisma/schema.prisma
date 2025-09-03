@@ -23,6 +23,9 @@ model Goal {
   tasks     Task[]
   parent    Goal?    @relation("GoalToSubGoals", fields: [parentId], references: [id])
   subGoals  Goal[]   @relation("GoalToSubGoals")
+
+  Roadmap   Roadmap @relation(fields: [roadmapId], references: [id])
+  roadmapId String
 }
 
 model Task {
@@ -31,4 +34,12 @@ model Task {
   title  String
   status String @default("TODO")
   goal   Goal   @relation(fields: [goalId], references: [id])
+}
+
+model Roadmap {
+  id        String   @id @default(cuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  goals     Goal[]
 }
