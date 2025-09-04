@@ -3,7 +3,7 @@ import { TaskSchema } from './task.types';
 
 //type declaration and not inference from zod schema because it keeps showing ts circularity errors
 
-type Goal = {
+export type Goal = {
   id: string;
   title: string;
   parentId: string | null;
@@ -14,15 +14,13 @@ type Goal = {
   subgoals: Goal[];
 };
 
-const GoalSchema: z.ZodSchema<Goal> = z.object({
-  id: z.string().cuid(),
+export const GoalSchema: z.ZodSchema<Goal> = z.object({
+  id: z.cuid(),
   title: z.string().min(1, "The title can't be empty"),
-  parentId: z.string().cuid().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  parentId: z.cuid().nullable(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
   tasks: z.array(TaskSchema),
-  roadmapId: z.string().cuid(),
+  roadmapId: z.cuid(),
   subgoals: z.lazy(() => z.array(GoalSchema)),
 });
-
-export { type Goal, GoalSchema };

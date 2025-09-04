@@ -1,12 +1,11 @@
 import express from 'express';
-import ServerRoutes from '../config/serverRoutes';
 import { GoalController } from '../controllers';
 
 const router = express.Router();
 
 const goalController = new GoalController();
 
-router.get(ServerRoutes.goals, goalController.getGoals);
-router.post(ServerRoutes.goal, goalController.createGoal);
+router.get('/', goalController.getGoals);
+router.post('/', goalController.createGoal);
 
 export default router;

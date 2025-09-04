@@ -8,7 +8,7 @@ import type {
 import api from '../../utils/axios.ts';
 import { API_ENDPOINTS } from '../../../config/api.ts';
 import * as z from 'zod';
-import { type Goal, RoadmapSchema } from '@roadmap-io/types';
+import { type Goal, type Roadmap, RoadmapSchema } from '@roadmap-io/types';
 import StatusEnum, { type StatusKeys } from '../../../config/Status.enum.ts';
 
 interface RoadmapsState {
@@ -30,7 +30,7 @@ const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunk
       return thunkAPI.rejectWithValue('Data validation error');
     }
 
-    const roadmaps = validateResult.data;
+    const roadmaps: Roadmap[] = validateResult.data;
 
     const normalizedData: {
       roadmaps: NormalizedEntities<NormalizedRoadmap>;

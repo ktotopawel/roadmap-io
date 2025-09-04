@@ -1,7 +1,6 @@
 const ServerRoutes = {
+  api: '/api',
   goals: '/goals',
-  goal: '/goal',
-  roadmap: '/roadmap',
   roadmaps: '/roadmaps',
 };
 

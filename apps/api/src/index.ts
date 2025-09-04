@@ -1,16 +1,26 @@
 import express, { Express } from 'express';
 import dotenv from 'dotenv';
-import { goalRouter, roadmapRouter } from './routes';
+import cors from 'cors';
+import apiRouter from './router';
+import serverRoutes from './config/serverRoutes';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+app.use(
+  cors({
+    origin: frontendUrl,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
-app.use(goalRouter);
-app.use(roadmapRouter);
+app.use(serverRoutes.api, apiRouter);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

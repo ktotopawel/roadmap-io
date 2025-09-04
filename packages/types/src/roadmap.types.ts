@@ -2,10 +2,10 @@ import * as z from 'zod';
 import { GoalSchema } from './goal.types';
 
 export const RoadmapSchema = z.object({
-  id: z.string().cuid(),
+  id: z.cuid(),
   title: z.string().min(1, "The title can't be empty"),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
   goals: z.array(GoalSchema),
 });
 
