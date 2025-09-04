@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import roadmapReducer from './slices/roadmaps.slice';
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    roadmaps: roadmapReducer,
+  },
 });
 
 export default store;
