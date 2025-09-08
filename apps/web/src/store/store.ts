@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import roadmapReducer from './slices/roadmaps.slice';
+import goalsReducer from './slices/goals.slice';
+import tasksReducer from './slices/tasks.slice';
 
 const store = configureStore({
   reducer: {
     roadmaps: roadmapReducer,
+    goals: goalsReducer,
+    tasks: tasksReducer,
   },
 });
 

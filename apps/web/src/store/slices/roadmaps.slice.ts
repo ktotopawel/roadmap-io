@@ -18,6 +18,16 @@ interface RoadmapsState {
   error: string | null;
 }
 
+const initialState: RoadmapsState = {
+  roadmaps: {
+    byId: {},
+    allIds: [],
+  },
+  activeRoadmap: null,
+  status: StatusEnum.IDLE,
+  error: null,
+};
+
 const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunkAPI) => {
   try {
     const response = await api.get(API_ENDPOINTS.ROADMAPS);
@@ -82,16 +92,6 @@ const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunk
     return thunkAPI.rejectWithValue('Fetch error');
   }
 });
-
-const initialState: RoadmapsState = {
-  roadmaps: {
-    byId: {},
-    allIds: [],
-  },
-  activeRoadmap: null,
-  status: StatusEnum.IDLE,
-  error: null,
-};
 
 const roadmapsSlice = createSlice({
   name: 'roadmaps',
