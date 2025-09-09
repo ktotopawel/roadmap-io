@@ -13,7 +13,7 @@ import StatusEnum, { type StatusKeys } from '../../../config/Status.enum.ts';
 
 interface RoadmapsState {
   roadmaps: NormalizedEntities<NormalizedRoadmap>;
-  activeRoadmap: NormalizedRoadmap | null;
+  activeRoadmapId: string;
   status: StatusKeys;
   error: string | null;
 }
@@ -23,7 +23,7 @@ const initialState: RoadmapsState = {
     byId: {},
     allIds: [],
   },
-  activeRoadmap: null,
+  activeRoadmapId: '',
   status: StatusEnum.IDLE,
   error: null,
 };
@@ -97,8 +97,8 @@ const roadmapsSlice = createSlice({
   name: 'roadmaps',
   initialState,
   reducers: {
-    setActiveRoadmap: (state, action: PayloadAction<NormalizedRoadmap>) => {
-      state.activeRoadmap = action.payload;
+    setActiveRoadmap: (state, action: PayloadAction<string>) => {
+      state.activeRoadmapId = action.payload;
     },
     setRoadmaps: (state, action: PayloadAction<NormalizedEntities<NormalizedRoadmap>>) => {
       state.roadmaps = action.payload;
