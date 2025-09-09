@@ -5,7 +5,7 @@ export const TaskSchema = z.object({
   goalId: z.cuid(),
   title: z.string().min(1, "Title can't be empty"),
   status: z.string(),
-  dueDate: z.coerce.date(),
+  dueDate: z.coerce.date().nullable(),
 });
 
 export type Task = z.infer<typeof TaskSchema>;

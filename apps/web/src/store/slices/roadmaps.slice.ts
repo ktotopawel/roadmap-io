@@ -58,13 +58,18 @@ const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunk
 
         normalizedData.goals.byId[goal.id] = {
           ...normalizedGoal,
+          createdAt: goal.createdAt.toISOString(),
+          updatedAt: goal.updatedAt.toISOString(),
           subgoalIds: subgoals.map((subgoal) => subgoal.id),
           taskIds: tasks.map((task) => task.id),
         };
         normalizedData.goals.allIds.push(goal.id);
 
         tasks.forEach((task) => {
-          normalizedData.tasks.byId[task.id] = task;
+          normalizedData.tasks.byId[task.id] = {
+            ...task,
+            dueDate: task.dueDate ? task.dueDate.toISOString() : null,
+          };
           normalizedData.tasks.allIds.push(task.id);
         });
 
@@ -79,6 +84,8 @@ const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunk
 
       normalizedData.roadmaps.byId[roadmap.id] = {
         ...normalizedRoadmap,
+        createdAt: roadmap.createdAt.toISOString(),
+        updatedAt: roadmap.updatedAt.toISOString(),
         goalIds: roadmap.goals.map((goal) => goal.id),
       };
       normalizedData.roadmaps.allIds.push(roadmap.id);

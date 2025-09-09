@@ -29,11 +29,12 @@ model Goal {
 }
 
 model Task {
-  id     String @id @default(cuid())
-  goalId String
-  title  String
-  status String @default("TODO")
-  goal   Goal   @relation(fields: [goalId], references: [id])
+  id      String    @id @default(cuid())
+  goalId  String
+  title   String
+  status  String    @default("TODO")
+  goal    Goal      @relation(fields: [goalId], references: [id])
+  dueDate DateTime?
 }
 
 model Roadmap {
