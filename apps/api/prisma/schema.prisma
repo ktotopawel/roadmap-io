@@ -23,8 +23,7 @@ model Goal {
   tasks     Task[]
   parent    Goal?    @relation("GoalToSubGoals", fields: [parentId], references: [id])
   subGoals  Goal[]   @relation("GoalToSubGoals")
-
-  Roadmap   Roadmap @relation(fields: [roadmapId], references: [id])
+  Roadmap   Roadmap  @relation(fields: [roadmapId], references: [id])
   roadmapId String
 }
 
@@ -39,8 +38,28 @@ model Task {
 
 model Roadmap {
   id        String   @id @default(cuid())
+  userId    String
   title     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   goals     Goal[]
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String
+  createdAt DateTime  @default(now())
+  roadmaps  Roadmap[]
+  tokens    Token[]
+}
+
+model Token {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  User      User     @relation(fields: [userId], references: [id])
 }

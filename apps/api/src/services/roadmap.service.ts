@@ -9,11 +9,12 @@ class RoadmapService {
     this.goalsService = new GoalService();
   }
 
-  public async createRoadmap(title: string) {
+  public async createRoadmap(title: string, userId: string) {
     try {
       return await prisma.roadmap.create({
         data: {
           title: title,
+          userId: userId,
         },
       });
     } catch (e) {
@@ -21,9 +22,19 @@ class RoadmapService {
     }
   }
 
-  public async getRoadmaps() {
+  public async getRoadmaps(userId: string) {
     try {
-      const roadmaps = await prisma.roadmap.findMany();
+      const roadmaps = await prisma.roadmap.findMany({
+        where: {
+          userId: userId,
+        },
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
 
       return await Promise.all(
         roadmaps.map(async (roadmap) => {
