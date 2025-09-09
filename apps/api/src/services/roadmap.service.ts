@@ -11,9 +11,9 @@ class RoadmapService {
     this.goalsService = new GoalService();
   }
 
-  public async createRoadmap(title: string, userId: string): Promise<Omit<Roadmap, 'goals'>> {
+  public createRoadmap(title: string, userId: string) {
     try {
-      return await prisma.roadmap.create({
+      return prisma.roadmap.create({
         data: {
           title: title,
           userId: userId,
@@ -24,7 +24,7 @@ class RoadmapService {
     }
   }
 
-  public async getRoadmaps(userId: string): Promise<Roadmap[]> {
+  public async getRoadmaps(userId: string) {
     try {
       const roadmaps = await prisma.roadmap.findMany({
         where: {
