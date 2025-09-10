@@ -10,48 +10,52 @@ class RoadmapController {
     this.roadmapService = new RoadmapService();
   }
 
-  public createRoadmap = async (req: Request, res: Response): Promise<Response> => {
+  public createRoadmap = (req: Request, res: Response): void => {
     const parsedBody = roadmapPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
-      return res.status(ServerStatuses.BAD_REQUEST).json({
-        error: `${ServerStatuses.BAD_REQUEST} Bad request. \n Error: ${parsedBody.error}`,
+      res.status(ServerStatuses.BAD_REQUEST).json({
+        errorCode: ServerStatuses.BAD_REQUEST,
+        error: parsedBody.error,
       });
+      return;
     }
 
     const { title, userId } = parsedBody.data;
 
-    try {
-      const roadmap = await this.roadmapService.createRoadmap(title, userId);
-
-      return res.status(ServerStatuses.CREATED).send(roadmap);
-    } catch (e) {
-      console.error('Error creating roadmap. Error: ', e);
-      return res.status(ServerStatuses.BACKEND_ERROR).send({ error: 'Failed to create roadmap' });
-    }
+    this.roadmapService
+      .createRoadmap(title, userId)
+      .then((result) => {
+        res.status(ServerStatuses.CREATED).json(result);
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+        res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Failed to create a roadmap' });
+      });
   };
 
-  public getRoadmaps = async (req: Request, res: Response): Promise<Response> => {
+  public getRoadmaps = (req: Request, res: Response): void => {
     const parsedBody = getRoadmapsPayload.safeParse(req.body);
-    const badRequestCode = ServerStatuses.BAD_REQUEST.toString();
 
     if (!parsedBody.success) {
-      const error =
-        parsedBody.error.message + '\n' + parsedBody.error.stack || 'No stack trace available';
-      return res.status(ServerStatuses.BAD_REQUEST).json({
-        error: `${badRequestCode} Bad request. \n Error: ${error}`,
+      res.status(ServerStatuses.BAD_REQUEST).json({
+        errorCode: ServerStatuses.BAD_REQUEST,
+        error: parsedBody.error,
       });
+      return;
     }
 
     const { userId } = parsedBody.data;
 
-    try {
-      const roadmaps = await this.roadmapService.getRoadmaps(userId);
-      return res.status(ServerStatuses.OK).send(roadmaps);
-    } catch (e) {
-      console.error('Error fetching roadmaps. Error: ', e);
-      return res.status(ServerStatuses.BACKEND_ERROR).send({ error: 'Failed to fetch roadmaps' });
-    }
+    this.roadmapService
+      .getRoadmaps(userId)
+      .then((result) => {
+        res.status(ServerStatuses.OK).json(result);
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+        res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Failed to fetch roadmaps' });
+      });
   };
 }
 

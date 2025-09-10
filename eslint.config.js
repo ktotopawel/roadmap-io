@@ -27,7 +27,8 @@ export default [
       '**/.turbo/**',
       '**/.next/**',
       '**/coverage/**',
-      '**/*.config.js', // if you don't want to lint config files
+      '**/*.config.js',
+      '**/api/generated/prisma**',
     ],
   },
 

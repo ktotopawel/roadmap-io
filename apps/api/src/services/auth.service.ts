@@ -1,17 +1,19 @@
 import type { User, Token } from '@roadmap-io/types';
 import prisma from '../../prisma/prisma';
 import { v4 as uuidv4 } from 'uuid';
+import { MissingEnvError } from '../errors/missingEnvError';
 
 class AuthService {
   private FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-  public async magicLink(email: string) {
-    const magicLink = this.generateMagicLink(email);
+  public async magicLink(email: string): Promise<void> {
+    const magicLink = await this.generateMagicLink(email);
 
+    //eslint-disable-next-line no-console
     console.log(`Magic Link: ${magicLink}`);
   }
 
-  public async consumeToken(email: string, token: string) {
+  public async consumeToken(email: string, token: string): Promise<void> {
     const user = await prisma.user.findUnique({
       where: { email: email },
       include: {
@@ -37,7 +39,7 @@ class AuthService {
       throw new Error('Token expired');
     }
 
-    prisma.token.update({
+    await prisma.token.update({
       where: {
         token: token,
       },
@@ -49,14 +51,14 @@ class AuthService {
     return;
   }
 
-  private async generateMagicLink(email: string) {
+  private async generateMagicLink(email: string): Promise<string> {
     const user = await this.getUserByEmail(email);
     const token = await this.generateToken(user.id);
 
     return this.FRONTEND_URL + '/auth/magic?token=' + token.token + '&email=' + email;
   }
 
-  private async generateToken(userId: string) {
+  private async generateToken(userId: string): Promise<Token> {
     const tokenString = uuidv4();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
@@ -88,6 +90,10 @@ class AuthService {
 
   private generateJwt(user: User) {
     const JWT_KEY = process.env.JWT_SECRET;
+
+    if (!JWT_KEY) {
+      throw new MissingEnvError('JWT_KEY');
+    }
   }
 }
 

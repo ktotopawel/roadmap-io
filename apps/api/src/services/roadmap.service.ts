@@ -1,6 +1,8 @@
 import prisma from '../../prisma/prisma';
 import { GoalService } from './index';
+import type { Roadmap } from '@roadmap-io/types';
 import { type Goal } from '@roadmap-io/types';
+import DatabaseError from '../errors/databaseError';
 
 class RoadmapService {
   private goalsService;
@@ -9,7 +11,7 @@ class RoadmapService {
     this.goalsService = new GoalService();
   }
 
-  public async createRoadmap(title: string, userId: string) {
+  public async createRoadmap(title: string, userId: string): Promise<Omit<Roadmap, 'goals'>> {
     try {
       return await prisma.roadmap.create({
         data: {
@@ -18,11 +20,11 @@ class RoadmapService {
         },
       });
     } catch (e) {
-      throw new Error(`Error creating roadmap: ${e}`);
+      throw new DatabaseError('Error creating roadmap', e);
     }
   }
 
-  public async getRoadmaps(userId: string) {
+  public async getRoadmaps(userId: string): Promise<Roadmap[]> {
     try {
       const roadmaps = await prisma.roadmap.findMany({
         where: {
@@ -40,16 +42,16 @@ class RoadmapService {
         roadmaps.map(async (roadmap) => {
           return {
             ...roadmap,
-            goals: await this.buildGoalTree(await this.goalsService.getGoalByRoadmapId(roadmap.id)),
+            goals: this.buildGoalTree(await this.goalsService.getGoalByRoadmapId(roadmap.id)),
           };
         })
       );
     } catch (e) {
-      throw new Error(`Error fetching roadmaps: ${e}`);
+      throw new DatabaseError('Error getting roadmaps', e);
     }
   }
 
-  private async buildGoalTree(goals: Omit<Goal, 'subgoals'>[]) {
+  private buildGoalTree(goals: Omit<Goal, 'subgoals'>[]): Goal[] {
     const goalMap = new Map<string, Goal>();
 
     goals.forEach((goal) => {

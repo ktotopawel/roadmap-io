@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import ServerStatuses from '../config/serverStatuses';
 import GoalService from '../services/goal.service';
+import { GoalPayload } from '@roadmap-io/types';
 
 class GoalController {
   private goalService;
@@ -9,22 +10,31 @@ class GoalController {
     this.goalService = new GoalService();
   }
 
-  public createGoal = async (req: Request, res: Response) => {
-    const { title, roadmapId } = req.body;
+  public createGoal = (req: Request, res: Response): void => {
+    const parsedBody = GoalPayload.safeParse(req.body);
 
-    try {
-      const goal = await this.goalService.createGoal(title, roadmapId);
-      return res.status(ServerStatuses.CREATED).json(goal);
-    } catch (e) {
-      console.error('Error creating goal. Error: ', e);
-      return res.status(ServerStatuses.BACKEND_ERROR).json({ error: e });
+    if (!parsedBody.success) {
+      res.status(ServerStatuses.BAD_REQUEST).json();
+      return;
     }
+
+    const { title, roadmapId } = parsedBody.data;
+
+    this.goalService
+      .createGoal(title, roadmapId)
+      .then((goal) => {
+        res.status(ServerStatuses.CREATED).json(goal);
+      })
+      .catch((e: unknown) => {
+        console.error('Error creating goal. Error: ', e);
+        res.status(ServerStatuses.BACKEND_ERROR).json({ error: e });
+      });
   };
 
-  getGoals() {
+  public getGoals = (): void => {
     //todo create get goals route
-    return false;
-  }
+    return;
+  };
 }
 
 export default GoalController;
