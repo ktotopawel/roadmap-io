@@ -52,7 +52,7 @@ const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunk
       tasks: { byId: {}, allIds: [] },
     };
 
-    const normalizeTasksAndGoals = (goals: Goal[]) => {
+    const normalizeTasksAndGoals = (goals: Goal[]): void => {
       goals.forEach((goal) => {
         const { subgoals, tasks, ...normalizedGoal } = goal;
 

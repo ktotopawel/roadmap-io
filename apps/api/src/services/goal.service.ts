@@ -1,7 +1,12 @@
 import prisma from '../../prisma/prisma';
+import DatabaseError from '../errors/databaseError';
+import type { Goal } from '@roadmap-io/types';
 
 class GoalService {
-  public async createGoal(title: string, roadmapId: string) {
+  public async createGoal(
+    title: string,
+    roadmapId: string
+  ): Promise<Omit<Goal, 'subgoals' | 'tasks'>> {
     try {
       return await prisma.goal.create({
         data: {
@@ -11,11 +16,11 @@ class GoalService {
         },
       });
     } catch (error) {
-      throw new Error(`Error creating goal: ${error}`);
+      throw new DatabaseError('Error creating goal', error);
     }
   }
 
-  public async getGoalByRoadmapId(roadmapId: string) {
+  public async getGoalByRoadmapId(roadmapId: string): Promise<Array<Omit<Goal, 'subgoals'>>> {
     try {
       return await prisma.goal.findMany({
         where: { roadmapId: roadmapId },
@@ -24,8 +29,7 @@ class GoalService {
         },
       });
     } catch (e) {
-      console.error('Error fetching goals by roadmapId. Error: ', e);
-      throw new Error(`Error fetching goals by roadmapId: ${e}`);
+      throw new DatabaseError('Error fetching goals by roadmap ID', e);
     }
   }
 }

@@ -1,7 +1,7 @@
 import RoadmapService from '../services/roadmap.service';
 import ServerStatuses from '../config/serverStatuses';
-import { Request, Response } from 'express';
-import { roadmapPayload } from '@roadmap-io/types';
+import type { Request, Response } from 'express';
+import { getRoadmapsPayload, roadmapPayload } from '@roadmap-io/types';
 
 class RoadmapController {
   private roadmapService: RoadmapService;
@@ -10,35 +10,52 @@ class RoadmapController {
     this.roadmapService = new RoadmapService();
   }
 
-  public createRoadmap = async (req: Request, res: Response) => {
+  public createRoadmap = (req: Request, res: Response): void => {
     const parsedBody = roadmapPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
-      return res.status(ServerStatuses.BAD_REQUEST).json({
-        error: `${ServerStatuses.BAD_REQUEST} Bad request. \n Error: ${parsedBody.error}`,
+      res.status(ServerStatuses.BAD_REQUEST).json({
+        errorCode: ServerStatuses.BAD_REQUEST,
+        error: parsedBody.error,
       });
+      return;
     }
 
-    const { title } = parsedBody.data;
+    const { title, userId } = parsedBody.data;
 
-    try {
-      const roadmap = this.roadmapService.createRoadmap(title);
-
-      return res.status(ServerStatuses.CREATED).send(roadmap);
-    } catch (e) {
-      console.error('Error creating roadmap. Error: ', e);
-      return res.status(ServerStatuses.BACKEND_ERROR).send({ error: 'Failed to create roadmap' });
-    }
+    this.roadmapService
+      .createRoadmap(title, userId)
+      .then((result) => {
+        res.status(ServerStatuses.CREATED).json(result);
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+        res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Failed to create a roadmap' });
+      });
   };
 
-  public getRoadmaps = async (req: Request, res: Response) => {
-    try {
-      const roadmaps = await this.roadmapService.getRoadmaps();
-      return res.status(ServerStatuses.OK).send(roadmaps);
-    } catch (e) {
-      console.error('Error fetching roadmaps. Error: ', e);
-      return res.status(ServerStatuses.BACKEND_ERROR).send({ error: 'Failed to fetch roadmaps' });
+  public getRoadmaps = (req: Request, res: Response): void => {
+    const parsedBody = getRoadmapsPayload.safeParse(req.body);
+
+    if (!parsedBody.success) {
+      res.status(ServerStatuses.BAD_REQUEST).json({
+        errorCode: ServerStatuses.BAD_REQUEST,
+        error: parsedBody.error,
+      });
+      return;
     }
+
+    const { userId } = parsedBody.data;
+
+    this.roadmapService
+      .getRoadmaps(userId)
+      .then((result) => {
+        res.status(ServerStatuses.OK).json(result);
+      })
+      .catch((e: unknown) => {
+        console.error(e);
+        res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Failed to fetch roadmaps' });
+      });
   };
 }
 

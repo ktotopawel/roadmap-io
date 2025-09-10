@@ -3,25 +3,35 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start:api": "pnpm --filter api start",
     "dev:api": "pnpm --filter api dev",
     "start:web": "pnpm --filter web start",
     "dev:web": "pnpm --filter web dev",
     "dev": "concurrently \"pnpm --filter ./apps/api run dev\" \"pnpm --filter ./apps/web run dev\" \"pnpm --filter ./packages/types run dev\" -n \"api,web,types\" -c \"yellow,blue,cyan\"",
-    "start": "concurrently \"pnpm --filter ./apps/api run start\" \"pnpm --filter ./apps/web run start\" -n \"api,web\" -c \"yellow,blue\""
+    "start": "concurrently \"pnpm --filter ./apps/api run start\" \"pnpm --filter ./apps/web run start\" -n \"api,web\" -c \"yellow,blue\"",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+    "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx --fix",
+    "format": "prettier --write .",
+    "check:format": "prettier --check ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "private": true,
   "devDependencies": {
+    "@eslint/js": "^9.34.0",
     "@typescript-eslint/eslint-plugin": "^8.41.0",
     "@typescript-eslint/parser": "^8.41.0",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "prettier": "^3.6.2"
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.41.0"
   },
   "dependencies": {
     "concurrently": "^9.2.1",

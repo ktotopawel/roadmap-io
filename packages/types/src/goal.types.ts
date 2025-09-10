@@ -14,7 +14,7 @@ export type Goal = {
   subgoals: Goal[];
 };
 
-export const GoalSchema: z.ZodSchema<Goal> = z.object({
+export const GoalSchema: z.ZodType<Goal> = z.object({
   id: z.cuid(),
   title: z.string().min(1, "The title can't be empty"),
   parentId: z.cuid().nullable(),
@@ -24,3 +24,10 @@ export const GoalSchema: z.ZodSchema<Goal> = z.object({
   roadmapId: z.cuid(),
   subgoals: z.lazy(() => z.array(GoalSchema)),
 });
+
+export const GoalPayload = z.object({
+  title: z.string().min(1, "The title can't be empty"),
+  roadmapId: z.cuid(),
+});
+
+export type GoalPayload = z.infer<typeof GoalPayload>;

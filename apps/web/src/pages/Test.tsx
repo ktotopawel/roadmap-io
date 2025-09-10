@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector } from '../store/hooks.ts';
 import { fetchRoadmaps, setActiveRoadmap } from '../store/slices/roadmaps.slice.ts';
 import selectActiveRoadmap from '../store/selectors/roadmap.selector.ts';
+import type { ReactElement } from 'react';
 
-const Test = () => {
+const Test = (): ReactElement => {
   const roadmaps = useAppSelector((state) => state.roadmaps);
   const goals = useAppSelector((state) => state.goals);
   const tasks = useAppSelector((state) => state.tasks);
@@ -12,7 +13,7 @@ const Test = () => {
     dispatch(fetchRoadmaps());
   };
 
-  const handleSelect = (id: string) => {
+  const handleSelect = (id: string): void => {
     dispatch(setActiveRoadmap(id));
   };
 
