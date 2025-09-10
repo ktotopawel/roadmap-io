@@ -1,4 +1,5 @@
-import express, { Express } from 'express';
+import type { Express } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import apiRouter from './router';

@@ -13,6 +13,13 @@ export type Roadmap = z.infer<typeof RoadmapSchema>;
 
 export const roadmapPayload = z.object({
   title: z.string().min(1, "The title can't be empty"),
+  userId: z.cuid(),
 });
 
 export type RoadmapPayload = z.infer<typeof roadmapPayload>;
+
+export const getRoadmapsPayload = z.object({
+  userId: z.cuid(),
+});
+
+export type GetRoadmapsPayload = z.infer<typeof getRoadmapsPayload>;

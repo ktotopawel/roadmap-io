@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import ServerStatuses from '../config/serverStatuses';
 import GoalService from '../services/goal.service';
 
