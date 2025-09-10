@@ -14,7 +14,7 @@ class GoalController {
     const parsedBody = GoalPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
-      res.status(ServerStatuses.BAD_REQUEST).json();
+      res.status(ServerStatuses.BAD_REQUEST).json({ error: parsedBody.error });
       return;
     }
 
