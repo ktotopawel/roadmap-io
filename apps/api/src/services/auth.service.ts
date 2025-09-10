@@ -85,7 +85,7 @@ class AuthService {
 
   private validateToken(token: Token): boolean {
     const now = new Date();
-    return token.expiresAt < now && !token.usedAt;
+    return token.expiresAt > now && !token.usedAt;
   }
 
   private generateJwt(user: User) {
