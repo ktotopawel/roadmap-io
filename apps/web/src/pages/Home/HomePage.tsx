@@ -1,4 +1,6 @@
-const HomePage = () => {
+import type { ReactElement } from 'react';
+
+const HomePage = (): ReactElement => {
   return <></>;
 };
 

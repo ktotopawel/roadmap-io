@@ -1,4 +1,3 @@
-// eslint.config.js
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -40,7 +39,11 @@ export default [
       sourceType: 'module',
       parser: tseslint.parser,
       parserOptions: {
-        project: ['./apps/*/tsconfig.json', './packages/*/tsconfig.json'],
+        project: [
+          './apps/*/tsconfig.json',
+          './apps/*/tsconfig.*.json',
+          './packages/*/tsconfig.json',
+        ],
         tsconfigRootDir: import.meta.dirname,
       },
       globals: {

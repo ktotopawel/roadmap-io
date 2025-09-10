@@ -1,4 +1,6 @@
-const NavBar = () => {
+import type { ReactElement } from 'react';
+
+const NavBar = (): ReactElement => {
   return <div>NavBar</div>;
 };
 

@@ -14,7 +14,7 @@ export type Goal = {
   subgoals: Goal[];
 };
 
-export const GoalSchema: z.ZodSchema<Goal> = z.object({
+export const GoalSchema: z.ZodType<Goal> = z.object({
   id: z.cuid(),
   title: z.string().min(1, "The title can't be empty"),
   parentId: z.cuid().nullable(),
