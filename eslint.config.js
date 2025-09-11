@@ -28,6 +28,7 @@ export default [
       '**/coverage/**',
       '**/*.config.js',
       '**/api/generated/prisma**',
+      '**/tsup.config.ts',
     ],
   },
 

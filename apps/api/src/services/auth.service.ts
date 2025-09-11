@@ -1,7 +1,6 @@
 import type { User, Token } from '@roadmap-io/types';
 import prisma from '../../prisma/prisma';
 import { v4 as uuidv4 } from 'uuid';
-import { MissingEnvError } from '../errors/missingEnvError';
 
 class AuthService {
   private FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
@@ -88,13 +87,15 @@ class AuthService {
     return token.expiresAt > now && !token.usedAt;
   }
 
-  private generateJwt(user: User) {
-    const JWT_KEY = process.env.JWT_SECRET;
+  //todo implement generating jwt
 
-    if (!JWT_KEY) {
-      throw new MissingEnvError('JWT_KEY');
-    }
-  }
+  // private generateJwt(user: User): void {
+  //   const JWT_KEY = process.env.JWT_SECRET;
+  //
+  //   if (!JWT_KEY) {
+  //     throw new MissingEnvError('JWT_KEY');
+  //   }
+  // }
 }
 
 export default AuthService;
