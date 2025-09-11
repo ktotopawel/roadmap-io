@@ -1,7 +1,8 @@
-import type { User, Token } from '@roadmap-io/types';
+import type { Token, User } from '@roadmap-io/types';
 import prisma from '../../prisma/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { MissingEnvError } from '../errors/missingEnvError';
+import jwt from 'jsonwebtoken';
 
 class AuthService {
   private FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
@@ -13,7 +14,7 @@ class AuthService {
     console.log(`Magic Link: ${magicLink}`);
   }
 
-  public async consumeToken(email: string, token: string): Promise<void> {
+  public async consumeToken(email: string, token: string): Promise<string> {
     const user = await prisma.user.findUnique({
       where: { email: email },
       include: {
@@ -48,7 +49,7 @@ class AuthService {
       },
     });
 
-    return;
+    return this.generateJwt(user);
   }
 
   private async generateMagicLink(email: string): Promise<string> {
@@ -88,12 +89,14 @@ class AuthService {
     return token.expiresAt > now && !token.usedAt;
   }
 
-  private generateJwt(user: User) {
+  private generateJwt(user: User): string {
     const JWT_KEY = process.env.JWT_SECRET;
 
     if (!JWT_KEY) {
       throw new MissingEnvError('JWT_KEY');
     }
+
+    return jwt.sign({ userId: user.id }, JWT_KEY, { expiresIn: 604800000 });
   }
 }
 

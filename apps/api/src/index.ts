@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import apiRouter from './router';
 import serverRoutes from './config/serverRoutes';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(serverRoutes.api, apiRouter);
 
