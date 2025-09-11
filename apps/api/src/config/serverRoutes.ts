@@ -3,8 +3,9 @@ const ServerRoutes = {
   goals: '/goals',
   roadmaps: '/roadmaps',
   auth: {
-    magicLink: '/auth/magic-link',
-    consumeToken: '/auth/consume-token',
+    base: '/auth',
+    magicLink: '/magic-link',
+    consumeToken: '/consume-token',
   },
 };
 

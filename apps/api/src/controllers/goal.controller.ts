@@ -1,20 +1,20 @@
 import type { Request, Response } from 'express';
 import ServerStatuses from '../config/serverStatuses';
-import GoalService from '../services/goal.service';
+import type GoalService from '../services/goal.service';
 import { GoalPayload } from '@roadmap-io/types';
 
 class GoalController {
   private goalService;
 
-  constructor() {
-    this.goalService = new GoalService();
+  constructor(goalService: GoalService) {
+    this.goalService = goalService;
   }
 
   public createGoal = (req: Request, res: Response): void => {
     const parsedBody = GoalPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
-      res.status(ServerStatuses.BAD_REQUEST).json({ error: parsedBody.error });
+      res.status(ServerStatuses.BAD_REQUEST).json({ Error: parsedBody.error });
       return;
     }
 
@@ -27,7 +27,7 @@ class GoalController {
       })
       .catch((e: unknown) => {
         console.error('Error creating goal. Error: ', e);
-        res.status(ServerStatuses.BACKEND_ERROR).json({ error: e });
+        res.status(ServerStatuses.BACKEND_ERROR).json({ Error: e });
       });
   };
 

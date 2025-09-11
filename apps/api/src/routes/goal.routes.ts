@@ -1,9 +1,11 @@
 import express from 'express';
 import { GoalController } from '../controllers';
+import { GoalService } from '../services';
 
 const router = express.Router();
 
-const goalController = new GoalController();
+const goalService = new GoalService();
+const goalController = new GoalController(goalService);
 
 router.get('/', goalController.getGoals);
 router.post('/', goalController.createGoal);

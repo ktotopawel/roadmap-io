@@ -34,7 +34,9 @@
     "typescript-eslint": "^8.41.0"
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "concurrently": "^9.2.1",
+    "jsonwebtoken": "^9.0.2",
     "zod": "^4.1.5"
   },
   "workspaces": [

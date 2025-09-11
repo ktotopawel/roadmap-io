@@ -1,4 +1,4 @@
-import RoadmapService from '../services/roadmap.service';
+import type RoadmapService from '../services/roadmap.service';
 import ServerStatuses from '../config/serverStatuses';
 import type { Request, Response } from 'express';
 import { getRoadmapsPayload, roadmapPayload } from '@roadmap-io/types';
@@ -6,8 +6,8 @@ import { getRoadmapsPayload, roadmapPayload } from '@roadmap-io/types';
 class RoadmapController {
   private roadmapService: RoadmapService;
 
-  constructor() {
-    this.roadmapService = new RoadmapService();
+  constructor(roadmapService: RoadmapService) {
+    this.roadmapService = roadmapService;
   }
 
   public createRoadmap = (req: Request, res: Response): void => {
@@ -15,8 +15,7 @@ class RoadmapController {
 
     if (!parsedBody.success) {
       res.status(ServerStatuses.BAD_REQUEST).json({
-        errorCode: ServerStatuses.BAD_REQUEST,
-        error: parsedBody.error,
+        Error: parsedBody.error,
       });
       return;
     }
@@ -39,8 +38,7 @@ class RoadmapController {
 
     if (!parsedBody.success) {
       res.status(ServerStatuses.BAD_REQUEST).json({
-        errorCode: ServerStatuses.BAD_REQUEST,
-        error: parsedBody.error,
+        Error: parsedBody.error,
       });
       return;
     }
@@ -54,7 +52,7 @@ class RoadmapController {
       })
       .catch((e: unknown) => {
         console.error(e);
-        res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Failed to fetch roadmaps' });
+        res.status(ServerStatuses.BAD_REQUEST).json({ Error: 'Failed to fetch roadmaps' });
       });
   };
 }
