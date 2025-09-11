@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import ServerStatuses from '../config/serverStatuses';
 import type GoalService from '../services/goal.service';
 import { GoalPayload } from '@roadmap-io/types';
+import UnimplementedError from '../errors/unimplementedError';
 
 class GoalController {
   private goalService;
@@ -10,7 +11,7 @@ class GoalController {
     this.goalService = goalService;
   }
 
-  public createGoal = (req: Request, res: Response): void => {
+  public createGoal = async (req: Request, res: Response): Promise<void> => {
     const parsedBody = GoalPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
@@ -20,20 +21,18 @@ class GoalController {
 
     const { title, roadmapId } = parsedBody.data;
 
-    this.goalService
-      .createGoal(title, roadmapId)
-      .then((goal) => {
-        res.status(ServerStatuses.CREATED).json(goal);
-      })
-      .catch((e: unknown) => {
-        console.error('Error creating goal. Error: ', e);
-        res.status(ServerStatuses.BACKEND_ERROR).json({ Error: e });
-      });
+    try {
+      const goal = await this.goalService.createGoal(title, roadmapId);
+      res.status(ServerStatuses.OK).json({ message: 'Success', goal: goal });
+    } catch (e) {
+      console.error('Error creating goal, Error: ', e);
+      res.status(ServerStatuses.BACKEND_ERROR).json({ error: 'Error creating goal' });
+    }
   };
 
-  public getGoals = (): void => {
+  public getGoals = (): Promise<void> => {
     //todo create get goals route
-    return;
+    throw new UnimplementedError('Get goals not implemented');
   };
 }
 

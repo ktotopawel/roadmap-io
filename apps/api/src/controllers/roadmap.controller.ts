@@ -10,7 +10,7 @@ class RoadmapController {
     this.roadmapService = roadmapService;
   }
 
-  public createRoadmap = (req: Request, res: Response): void => {
+  public createRoadmap = async (req: Request, res: Response): Promise<void> => {
     const parsedBody = roadmapPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
@@ -22,18 +22,16 @@ class RoadmapController {
 
     const { title, userId } = parsedBody.data;
 
-    this.roadmapService
-      .createRoadmap(title, userId)
-      .then((result) => {
-        res.status(ServerStatuses.CREATED).json(result);
-      })
-      .catch((e: unknown) => {
-        console.error(e);
-        res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Failed to create a roadmap' });
-      });
+    try {
+      const roadmap = await this.roadmapService.createRoadmap(title, userId);
+      res.status(ServerStatuses.OK).json({ message: 'Success', roadmap: roadmap });
+    } catch (e) {
+      console.error(e);
+      res.status(ServerStatuses.BACKEND_ERROR).json({ message: 'Failed to create roadmap' });
+    }
   };
 
-  public getRoadmaps = (req: Request, res: Response): void => {
+  public getRoadmaps = async (req: Request, res: Response): Promise<void> => {
     const parsedBody = getRoadmapsPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
@@ -45,15 +43,13 @@ class RoadmapController {
 
     const { userId } = parsedBody.data;
 
-    this.roadmapService
-      .getRoadmaps(userId)
-      .then((result) => {
-        res.status(ServerStatuses.OK).json(result);
-      })
-      .catch((e: unknown) => {
-        console.error(e);
-        res.status(ServerStatuses.BAD_REQUEST).json({ Error: 'Failed to fetch roadmaps' });
-      });
+    try {
+      const roadmaps = await this.roadmapService.getRoadmaps(userId);
+      res.status(ServerStatuses.OK).json({ message: 'Success', roadmaps: roadmaps });
+    } catch (e) {
+      console.error(e);
+      res.status(ServerStatuses.BACKEND_ERROR).json({ error: 'Failed to get roadmaps' });
+    }
   };
 }
 
