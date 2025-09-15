@@ -12,5 +12,7 @@
       "@roadmap-io/types": ["../types/dist"]
     }
   },
-  "include": ["src/**/*", "prisma/**/*"]
+  "include": ["src/**/*",
+    "src/prisma/**/*"
+  ]
 }
