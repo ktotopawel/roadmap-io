@@ -1,5 +1,5 @@
 import type { Token, User } from '@roadmap-io/types';
-import prisma from '../prisma/prisma';
+import prisma from '../lib/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { MissingEnvError } from '../errors/missingEnvError';
 import jwt from 'jsonwebtoken';

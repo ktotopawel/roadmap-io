@@ -1,4 +1,4 @@
-import prisma from '../prisma/prisma';
+import prisma from '../lib/prisma';
 import DatabaseError from '../errors/databaseError';
 import type { Goal } from '@roadmap-io/types';
 

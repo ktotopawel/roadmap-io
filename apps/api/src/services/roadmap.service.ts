@@ -1,4 +1,4 @@
-import prisma from '../prisma/prisma';
+import prisma from '../lib/prisma';
 import { GoalService } from './index';
 import type { Roadmap } from '@roadmap-io/types';
 import { type Goal } from '@roadmap-io/types';
