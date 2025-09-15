@@ -9,8 +9,8 @@ const Test = (): ReactElement => {
   const tasks = useAppSelector((state) => state.tasks);
 
   const dispatch = useAppDispatch();
-  const handleGetData = () => {
-    dispatch(fetchRoadmaps());
+  const handleGetData = (): void => {
+    void dispatch(fetchRoadmaps());
   };
 
   const handleSelect = (id: string): void => {

@@ -4,7 +4,7 @@ import type { ReactElement } from 'react';
 
 function App(): ReactElement {
   return (
-    <div className={''}>
+    <div className={'bg-black/95 min-h-screen text-white'}>
       <NavBar />
       <Router></Router>
     </div>

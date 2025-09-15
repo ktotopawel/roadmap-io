@@ -30,7 +30,7 @@ const initialState: RoadmapsState = {
 
 const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunkAPI) => {
   try {
-    const response = await api.get(API_ENDPOINTS.ROADMAPS);
+    const response = await api.get<Roadmap[]>(API_ENDPOINTS.ROADMAPS);
     const responseData = response.data;
 
     const validateResult = z.array(RoadmapSchema).safeParse(responseData);
