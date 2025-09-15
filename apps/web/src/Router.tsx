@@ -5,7 +5,7 @@ import LoginPage from './pages/Auth/LoginPage.tsx';
 import AppRoutes from './config/constants/AppRoutes.ts';
 import ProtectedRoute from './components/ProtectedRoute.tsx';
 import HomePage from './pages/Home/HomePage.tsx';
-import MagicLinkHandler from './utils/MagicLinkHandler.tsx';
+import MagicLinkHandler from './pages/Auth/MagicLinkHandler.tsx';
 
 const Router = (): ReactElement => {
   return (

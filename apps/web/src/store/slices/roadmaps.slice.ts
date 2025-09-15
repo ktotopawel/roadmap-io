@@ -6,10 +6,10 @@ import type {
   NormalizedTask,
 } from '../types.ts';
 import api from '../../utils/axios.ts';
-import { API_ENDPOINTS } from '../../../config/api.ts';
+import { API_ENDPOINTS } from '../../config/api.ts';
 import * as z from 'zod';
 import { type Goal, type Roadmap, RoadmapSchema } from '@roadmap-io/types';
-import StatusEnum, { type StatusKeys } from '../../../config/Status.enum.ts';
+import StatusEnum, { type StatusKeys } from '../../config/Status.enum.ts';
 
 interface RoadmapsState {
   roadmaps: NormalizedEntities<NormalizedRoadmap>;
