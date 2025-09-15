@@ -11,6 +11,7 @@
     "dev:web": "pnpm --filter web dev",
     "dev": "concurrently \"pnpm --filter ./apps/api run dev\" \"pnpm --filter ./apps/web run dev\" \"pnpm --filter ./packages/types run dev\" -n \"api,web,types\" -c \"yellow,blue,cyan\"",
     "start": "concurrently \"pnpm --filter ./apps/api run start\" \"pnpm --filter ./apps/web run start\" -n \"api,web\" -c \"yellow,blue\"",
+    "build": "concurrently \"pnpm --filter ./apps/api run build\" \"pnpm --filter ./apps/web run build\" \"pnpm --filter ./packages/types run build\" -n \"api,web,types\" -c \"yellow,blue,cyan\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx --fix",
     "format": "prettier --write .",

@@ -1,12 +1,17 @@
 import type { Express } from 'express';
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import apiRouter from './router';
 import serverRoutes from './config/serverRoutes';
 import cookieParser from 'cookie-parser';
+import DotenvFlow from 'dotenv-flow';
 
-dotenv.config();
+DotenvFlow.config({
+  path: __dirname + '/../',
+  node_env: process.env.NODE_ENV,
+  default_node_env: 'development',
+  debug: process.env.NODE_ENV === 'development',
+});
 
 const app: Express = express();
 const port = process.env.PORT || '3000';

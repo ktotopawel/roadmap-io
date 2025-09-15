@@ -5,7 +5,7 @@ import { MissingEnvError } from '../errors/missingEnvError';
 import jwt from 'jsonwebtoken';
 
 class AuthService {
-  private FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+  private FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
   public async magicLink(email: string): Promise<void> {
     const magicLink = await this.generateMagicLink(email);
