@@ -39,7 +39,7 @@ const InputWithIcon = React.forwardRef(
           })}
           onClick={handleIconClick}
         >
-          <Icon className={'fill-white/80 h-full'} />
+          <Icon className={'fill-white/80 h-full w-6 aspect-square'} />
         </div>
         <Input
           {...rest}
@@ -54,7 +54,7 @@ const InputWithIcon = React.forwardRef(
             internalRef.current = el;
           }}
           className={
-            'h-full px-2 py-1 rounded-r-lg focus-visible:bg-white/10 focus:outline-none focus-visible:outline-none focus:bg-white/10 flex-1'
+            'h-full px-2 py-1 rounded-r-lg focus-visible:bg-white/10 focus:outline-none focus-visible:outline-none focus:bg-white/10 flex-1 hover:bg-white/10 transition-colors duration-150'
           }
         />
       </div>

@@ -1,31 +1,33 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { Button } from '@headlessui/react';
 import type { ReactElement } from 'react';
-import { AtIcon } from '@phosphor-icons/react';
+import { AtIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import InputWithIcon from '../../components/InputWithIcon.tsx';
-import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import BasicButton from '../../components/BasicButton.tsx';
+import { useAppDispatch } from '../../store/hooks.ts';
+import { getMagicLink } from '../../store/slices/auth.slice.ts';
+import { LoginPayloadSchema } from '@roadmap-io/types';
 
 interface ILoginForm {
   email: string;
 }
 
-const loginSchema = z.object({
-  email: z.email('Invalid email.').nonempty('Provide an email for the magic link.'),
-});
-
 const LoginPage = (): ReactElement => {
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginForm>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(LoginPayloadSchema),
   });
 
   const onSubmit: SubmitHandler<ILoginForm> = (data) => {
     // eslint-disable-next-line no-console
     console.log(data);
+
+    void dispatch(getMagicLink(data));
   };
 
   return (
@@ -50,12 +52,7 @@ const LoginPage = (): ReactElement => {
               className={'flex-1'}
               {...register('email')}
             />
-            <Button
-              type="submit"
-              className={'rounded-lg border-2 border-white/30 px-2 py-1 bg-white/10'}
-            >
-              Submit
-            </Button>
+            <BasicButton icon={PaperPlaneTiltIcon} type={'submit'} />
           </div>
           {/* Smooth expanding error message */}
           <div

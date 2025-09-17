@@ -2,7 +2,12 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import StatusEnum, { type StatusKeys } from '../../config/Status.enum.ts';
 import api from '../../utils/axios.ts';
 import { API_ENDPOINTS } from '../../config/api.ts';
-import { type ConsumeTokenPayload, ConsumeTokenPayloadSchema } from '@roadmap-io/types';
+import {
+  type ConsumeTokenPayload,
+  ConsumeTokenPayloadSchema,
+  type LoginPayload,
+  LoginPayloadSchema,
+} from '@roadmap-io/types';
 
 interface IAuthState {
   isAuthenticated: boolean;
@@ -18,6 +23,23 @@ const initialState: IAuthState = {
   user: null,
   status: StatusEnum.IDLE,
 };
+
+const getMagicLink = createAsyncThunk(
+  'auth/getMagicLink',
+  async (payload: LoginPayload, thunkAPI) => {
+    const parseCall = LoginPayloadSchema.safeParse(payload);
+    if (!parseCall.success) {
+      thunkAPI.rejectWithValue('Wrong arguments error');
+    }
+
+    try {
+      await api.post(API_ENDPOINTS.GET_MAGIC_LINK, parseCall.data);
+    } catch (e) {
+      console.error(e);
+      return thunkAPI.rejectWithValue('Error generating magic link');
+    }
+  }
+);
 
 const consumeMagicLink = createAsyncThunk(
   'auth/consumeMagicLink',
@@ -58,4 +80,4 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export { consumeMagicLink };
+export { consumeMagicLink, getMagicLink };
