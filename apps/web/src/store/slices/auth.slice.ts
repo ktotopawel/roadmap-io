@@ -46,7 +46,7 @@ const authSlice = createSlice({
       state.status = StatusEnum.LOADING;
     });
     builder.addCase(consumeMagicLink.rejected, (state) => {
-      state.status = StatusEnum.LOADING;
+      state.status = StatusEnum.FAILED;
     });
     builder.addCase(consumeMagicLink.fulfilled, (state) => {
       state.status = StatusEnum.SUCCEEDED;

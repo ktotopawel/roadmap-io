@@ -1,9 +1,9 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { type ReactElement, useState, useEffect } from 'react';
+import { type ReactElement, useEffect } from 'react';
 import AppRoutes from '../../config/constants/AppRoutes.ts';
-import StatusEnum, { type StatusKeys } from '../../config/Status.enum.ts';
+import StatusEnum from '../../config/Status.enum.ts';
 import { CircleNotchIcon } from '@phosphor-icons/react';
-import { useAppDispatch } from '../../store/hooks.ts';
+import { useAppDispatch, useAppSelector } from '../../store/hooks.ts';
 import { consumeMagicLink } from '../../store/slices/auth.slice.ts';
 import { clsx } from 'clsx';
 
@@ -11,15 +11,11 @@ const MagicLinkHandler = (): ReactElement => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const email = searchParams.get('email');
-  const [status, setStatus] = useState<StatusKeys>(StatusEnum.LOADING);
   const dispatch = useAppDispatch();
+  const status = useAppSelector((state) => state.auth.status);
 
   const validateSearchParams = (token: string | null, email: string | null): boolean => {
-    if (!token || !email) {
-      setStatus(StatusEnum.FAILED);
-      return false;
-    }
-    return true;
+    return !(!token || !email);
   };
 
   useEffect(() => {
@@ -28,13 +24,7 @@ const MagicLinkHandler = (): ReactElement => {
     }
 
     if (typeof email === 'string' && typeof token === 'string') {
-      dispatch(consumeMagicLink({ email: email, token: token }))
-        .then(() => {
-          setStatus(StatusEnum.SUCCEEDED);
-        })
-        .catch(() => {
-          setStatus(StatusEnum.FAILED);
-        });
+      void dispatch(consumeMagicLink({ email: email, token: token }));
     }
   }, [token, email, dispatch]);
 
@@ -49,10 +39,12 @@ const MagicLinkHandler = (): ReactElement => {
       >
         {status === StatusEnum.FAILED && (
           <>
-            <h2 className={' text-2xl'}>No token to validate</h2>
+            <h2 className={' text-2xl'}>Error</h2>
             <p className={''}>
-              This page is intended to validate a magic link token, please use{' '}
-              <Link to={AppRoutes.LOGIN}>the login page</Link> to log in.
+              Token validation failed. Please use another magic link obtained from{' '}
+              <Link to={AppRoutes.LOGIN} className={'underline hover:text-white/75'}>
+                the login page
+              </Link>
             </p>
           </>
         )}
