@@ -5,6 +5,7 @@ const ServerRoutes = {
   users: {
     base: '/users',
     me: '/me',
+    email: '/email',
   },
   auth: {
     base: '/auth',

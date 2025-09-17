@@ -1,5 +1,5 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import type { ReactElement } from 'react';
+import { type ReactElement, useEffect } from 'react';
 import { AtIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import InputWithIcon from '../../components/InputWithIcon.tsx';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +7,7 @@ import BasicButton from '../../components/BasicButton.tsx';
 import { useAppDispatch } from '../../store/hooks.ts';
 import { getMagicLink } from '../../store/slices/auth.slice.ts';
 import { LoginPayloadSchema } from '@roadmap-io/types';
+import { fetchUser } from '../../store/slices/user.slice.ts';
 
 interface ILoginForm {
   email: string;
@@ -29,6 +30,10 @@ const LoginPage = (): ReactElement => {
 
     void dispatch(getMagicLink(data));
   };
+
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
 
   return (
     <div className={'min-h-screen max-w-screen w-full flex flex-col justify-center items-center'}>

@@ -5,6 +5,7 @@ import { userController } from '../controllers';
 
 const router = express.Router();
 
-router.post(ServerRoutes.users.me, asyncHandler(userController.getUserByEmail));
+router.post(ServerRoutes.users.email, asyncHandler(userController.getUserByEmail));
+router.get(ServerRoutes.users.me, asyncHandler(userController.getUserByToken));
 
 export default router;

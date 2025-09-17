@@ -29,7 +29,7 @@ const getMagicLink = createAsyncThunk(
   async (payload: LoginPayload, thunkAPI) => {
     const parseCall = LoginPayloadSchema.safeParse(payload);
     if (!parseCall.success) {
-      thunkAPI.rejectWithValue('Wrong arguments error');
+      return thunkAPI.rejectWithValue('Wrong arguments error');
     }
 
     try {
@@ -48,7 +48,7 @@ const consumeMagicLink = createAsyncThunk(
       const parseCall = ConsumeTokenPayloadSchema.safeParse(payload);
 
       if (!parseCall.success) {
-        thunkAPI.rejectWithValue('Wrong arguments error');
+        return thunkAPI.rejectWithValue('Wrong arguments error');
       }
 
       await api.post(API_ENDPOINTS.CONSUME_MAGIC_LINK, parseCall.data);
@@ -67,8 +67,9 @@ const authSlice = createSlice({
     builder.addCase(consumeMagicLink.pending, (state) => {
       state.status = StatusEnum.LOADING;
     });
-    builder.addCase(consumeMagicLink.rejected, (state) => {
+    builder.addCase(consumeMagicLink.rejected, (state, action) => {
       state.status = StatusEnum.FAILED;
+      console.error(action.payload);
     });
     builder.addCase(consumeMagicLink.fulfilled, (state) => {
       state.status = StatusEnum.SUCCEEDED;
