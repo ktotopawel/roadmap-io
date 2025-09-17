@@ -1,14 +1,14 @@
 import prisma from '../lib/prisma';
-import { GoalService } from './index';
 import type { Roadmap } from '@roadmap-io/types';
 import { type Goal } from '@roadmap-io/types';
 import DatabaseError from '../errors/databaseError';
+import type GoalService from './goal.service';
 
 class RoadmapService {
   private goalsService;
 
-  constructor() {
-    this.goalsService = new GoalService();
+  constructor(goalsService: GoalService) {
+    this.goalsService = goalsService;
   }
 
   public async createRoadmap(title: string, userId: string): Promise<Omit<Roadmap, 'goals'>> {

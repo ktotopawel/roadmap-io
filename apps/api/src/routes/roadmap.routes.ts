@@ -1,14 +1,12 @@
 import { Router } from 'express';
-import { RoadmapController } from '../controllers';
-import { RoadmapService } from '../services';
+import { roadmapController } from '../controllers';
 import asyncHandler from '../middleware/asyncHandler';
 
 const router = Router();
 
-const roadmapService = new RoadmapService();
-const roadmapController = new RoadmapController(roadmapService);
+const { createRoadmap, getRoadmaps } = roadmapController;
 
-router.post('/', asyncHandler(roadmapController.createRoadmap));
-router.get('/', asyncHandler(roadmapController.getRoadmaps));
+router.post('/', asyncHandler(createRoadmap));
+router.get('/', asyncHandler(getRoadmaps));
 
 export default router;

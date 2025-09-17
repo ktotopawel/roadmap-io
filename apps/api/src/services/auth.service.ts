@@ -3,9 +3,15 @@ import prisma from '../lib/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { MissingEnvError } from '../errors/missingEnvError';
 import jwt from 'jsonwebtoken';
+import type UserService from './user.service';
 
 class AuthService {
   private FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+  private readonly userService: UserService;
+
+  constructor(userService: UserService) {
+    this.userService = userService;
+  }
 
   public async magicLink(email: string): Promise<void> {
     const magicLink = await this.generateMagicLink(email);
@@ -53,7 +59,7 @@ class AuthService {
   }
 
   private async generateMagicLink(email: string): Promise<string> {
-    const user = await this.getUserByEmail(email);
+    const user = await this.userService.getUserByEmail(email);
     const token = await this.generateToken(user.id);
 
     return this.FRONTEND_URL + '/auth/magic?token=' + token.token + '&email=' + email;
@@ -70,18 +76,6 @@ class AuthService {
         expiresAt: expiresAt,
       },
     });
-  }
-
-  private async getUserByEmail(email: string): Promise<User> {
-    let user = await prisma.user.findUnique({ where: { email } });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: { email, name: email.split('@')[0] },
-      });
-    }
-
-    return user;
   }
 
   private validateToken(token: Token): boolean {

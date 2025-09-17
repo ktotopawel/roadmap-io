@@ -1,14 +1,12 @@
 import express from 'express';
-import { GoalController } from '../controllers';
-import { GoalService } from '../services';
+import { goalController } from '../controllers';
 import asyncHandler from '../middleware/asyncHandler';
 
 const router = express.Router();
 
-const goalService = new GoalService();
-const goalController = new GoalController(goalService);
+const { getGoals, createGoal } = goalController;
 
-router.get('/', asyncHandler(goalController.getGoals));
-router.post('/', asyncHandler(goalController.createGoal));
+router.get('/', asyncHandler(getGoals));
+router.post('/', asyncHandler(createGoal));
 
 export default router;
