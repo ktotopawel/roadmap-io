@@ -5,14 +5,23 @@
     "rootDir": "./src",
     "outDir": "dist",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@roadmap-io/types": ["../types/dist"]
-    }
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src"
+    ]
   },
-  "include": ["src/**/*",
+  "include": [
+    "src/**/*",
     "prisma/**/*"
+  ],
+  "files": [
+    "src/types/express/express.d.ts"
   ]
 }

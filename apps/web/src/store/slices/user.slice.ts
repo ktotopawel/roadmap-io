@@ -1,12 +1,12 @@
-import { type User, UserSchema } from '@roadmap-io/types';
-import { GetUserPayload } from '@roadmap-io/types';
+import { type SerializeUser, type User, UserSchema } from '@roadmap-io/types';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../utils/axios.ts';
 import { API_ENDPOINTS } from '../../config/api.ts';
 import StatusEnum, { type StatusKeys } from '../../config/Status.enum.ts';
+import type { AxiosResponse } from 'axios';
 
 interface IUserSlice {
-  me: User | null;
+  me: SerializeUser | null;
   status: StatusKeys;
 }
 
@@ -17,15 +17,20 @@ const initialState: IUserSlice = {
 
 const fetchUser = createAsyncThunk('user/fetchUser', async (_payload, thunkAPI) => {
   try {
-    const res = await api.get(API_ENDPOINTS.FETCH_USER);
+    const res: AxiosResponse<{ user: User }> = await api.get(API_ENDPOINTS.FETCH_USER);
 
-    const parsedRes = UserSchema.safeParse(res.data);
+    const parsedRes = UserSchema.safeParse(res.data.user);
 
     if (!parsedRes.success) {
       return thunkAPI.rejectWithValue('Wrong server response');
     }
 
-    return thunkAPI.fulfillWithValue(parsedRes.data);
+    const serializedUser: SerializeUser = {
+      ...parsedRes.data,
+      createdAt: parsedRes.data.createdAt.toISOString(),
+    };
+
+    return thunkAPI.fulfillWithValue(serializedUser);
   } catch (e) {
     return thunkAPI.rejectWithValue(e);
   }

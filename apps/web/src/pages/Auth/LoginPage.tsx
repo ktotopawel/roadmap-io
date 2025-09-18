@@ -4,10 +4,12 @@ import { AtIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import InputWithIcon from '../../components/InputWithIcon.tsx';
 import { zodResolver } from '@hookform/resolvers/zod';
 import BasicButton from '../../components/BasicButton.tsx';
-import { useAppDispatch } from '../../store/hooks.ts';
+import { useAppDispatch, useAppSelector } from '../../store/hooks.ts';
 import { getMagicLink } from '../../store/slices/auth.slice.ts';
 import { LoginPayloadSchema } from '@roadmap-io/types';
 import { fetchUser } from '../../store/slices/user.slice.ts';
+import { useNavigate } from 'react-router-dom';
+import AppRoutes from '../../config/constants/AppRoutes.ts';
 
 interface ILoginForm {
   email: string;
@@ -15,6 +17,9 @@ interface ILoginForm {
 
 const LoginPage = (): ReactElement => {
   const dispatch = useAppDispatch();
+  const navigator = useNavigate();
+
+  const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
 
   const {
     register,
@@ -32,8 +37,14 @@ const LoginPage = (): ReactElement => {
   };
 
   useEffect(() => {
-    dispatch(fetchUser());
-  }, []);
+    void dispatch(fetchUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuth) {
+      void navigator(AppRoutes.HOME);
+    }
+  }, [isAuth, navigator]);
 
   return (
     <div className={'min-h-screen max-w-screen w-full flex flex-col justify-center items-center'}>

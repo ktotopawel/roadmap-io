@@ -6,6 +6,6 @@ import { userController } from '../controllers';
 const router = express.Router();
 
 router.post(ServerRoutes.users.email, asyncHandler(userController.getUserByEmail));
-router.get(ServerRoutes.users.me, asyncHandler(userController.getUserByToken));
+router.get(ServerRoutes.users.me, userController.getUserByToken);
 
 export default router;

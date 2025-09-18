@@ -8,6 +8,7 @@ import {
   type LoginPayload,
   LoginPayloadSchema,
 } from '@roadmap-io/types';
+import { fetchUser } from './user.slice.ts';
 
 interface IAuthState {
   isAuthenticated: boolean;
@@ -75,6 +76,9 @@ const authSlice = createSlice({
       state.status = StatusEnum.SUCCEEDED;
       state.isAuthenticated = true;
       //todo fetch user data
+    });
+    builder.addCase(fetchUser.fulfilled, (state) => {
+      state.isAuthenticated = true;
     });
   },
 });
