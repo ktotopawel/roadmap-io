@@ -1,14 +1,20 @@
-import prisma from '../../prisma/prisma';
 import DatabaseError from '../errors/databaseError';
 import type { Goal } from '@roadmap-io/types';
+import type { PrismaClient } from '@prisma/client';
 
 class GoalService {
+  private readonly prisma: PrismaClient;
+
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma;
+  }
+
   public async createGoal(
     title: string,
     roadmapId: string
   ): Promise<Omit<Goal, 'subgoals' | 'tasks'>> {
     try {
-      return await prisma.goal.create({
+      return await this.prisma.goal.create({
         data: {
           title: title,
           parentId: null,
@@ -22,7 +28,7 @@ class GoalService {
 
   public async getGoalByRoadmapId(roadmapId: string): Promise<Array<Omit<Goal, 'subgoals'>>> {
     try {
-      return await prisma.goal.findMany({
+      return await this.prisma.goal.findMany({
         where: { roadmapId: roadmapId },
         include: {
           tasks: true,

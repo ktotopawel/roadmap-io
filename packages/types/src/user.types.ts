@@ -14,3 +14,12 @@ export const GetUserPayload = z.object({
 });
 
 export type GetUserPayload = z.infer<typeof GetUserPayload>;
+
+export const SerializeUser = z.object({
+  id: z.cuid(),
+  email: z.email(),
+  createdAt: z.iso.datetime(),
+  name: z.string(),
+});
+
+export type SerializeUser = z.infer<typeof SerializeUser>;
