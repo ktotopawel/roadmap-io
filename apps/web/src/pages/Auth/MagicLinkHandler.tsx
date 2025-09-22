@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { type ReactElement, useEffect } from 'react';
 import AppRoutes from '../../config/constants/AppRoutes.ts';
 import StatusEnum from '../../config/Status.enum.ts';
@@ -6,13 +6,17 @@ import { CircleNotchIcon } from '@phosphor-icons/react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks.ts';
 import { consumeMagicLink } from '../../store/slices/auth.slice.ts';
 import { clsx } from 'clsx';
+import { fetchUser } from '../../store/slices/user.slice.ts';
 
 const MagicLinkHandler = (): ReactElement => {
+  const navigator = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const email = searchParams.get('email');
   const dispatch = useAppDispatch();
   const status = useAppSelector((state) => state.auth.status);
+
+  const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
 
   const validateSearchParams = (token: string | null, email: string | null): boolean => {
     return !(!token || !email);
@@ -27,6 +31,16 @@ const MagicLinkHandler = (): ReactElement => {
       void dispatch(consumeMagicLink({ email: email, token: token }));
     }
   }, [token, email, dispatch]);
+
+  useEffect(() => {
+    void dispatch(fetchUser());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuth) {
+      void navigator(AppRoutes.HOME);
+    }
+  }, [isAuth, navigator]);
 
   return (
     <div className={'min-h-screen w-full flex justify-center items-center'}>

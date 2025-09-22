@@ -1,13 +1,18 @@
 import type { User } from '@roadmap-io/types';
-import prisma from '../lib/prisma';
 import DatabaseError from '../errors/databaseError';
+import type { PrismaClient } from '@prisma/client';
 
 class UserService {
+  private prisma: PrismaClient;
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma;
+  }
+
   public async getUserByEmail(email: string): Promise<User> {
-    let user = await prisma.user.findUnique({ where: { email } });
+    let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      user = await prisma.user.create({
+      user = await this.prisma.user.create({
         data: { email, name: email.split('@')[0] },
       });
     }
@@ -16,7 +21,7 @@ class UserService {
   }
 
   getUserById = async (userId: string): Promise<User> => {
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
       throw new DatabaseError('not found');
