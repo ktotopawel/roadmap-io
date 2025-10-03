@@ -15,7 +15,8 @@
     "typeRoots": [
       "./node_modules/@types",
       "./src"
-    ]
+    ],
+    "types": ["jest", "node"]
   },
   "include": [
     "src/**/*",

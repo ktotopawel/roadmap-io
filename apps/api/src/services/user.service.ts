@@ -8,19 +8,23 @@ class UserService {
     this.prisma = prisma;
   }
 
-  public async getUserByEmail(email: string): Promise<User> {
+  public getOrCreateUserByEmail = async (email: string): Promise<User> => {
     let user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      user = await this.prisma.user.create({
-        data: { email, name: email.split('@')[0] },
-      });
+      try {
+        user = await this.prisma.user.create({
+          data: { email, name: email.split('@')[0] },
+        });
+      } catch (e) {
+        throw new DatabaseError('Failed to create user ', e);
+      }
     }
 
     return user;
-  }
+  };
 
-  getUserById = async (userId: string): Promise<User> => {
+  public getUserById = async (userId: string): Promise<User> => {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {

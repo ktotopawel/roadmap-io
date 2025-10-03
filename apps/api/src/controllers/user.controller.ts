@@ -25,7 +25,7 @@ class UserController {
     const { email } = parsedBody.data;
 
     try {
-      const user = await this.userService.getUserByEmail(email);
+      const user = await this.userService.getOrCreateUserByEmail(email);
       res.status(ServerStatuses.OK).json(user);
       return;
     } catch (e) {

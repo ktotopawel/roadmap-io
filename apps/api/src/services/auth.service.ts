@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import type UserService from './user.service';
 import type { PrismaClient } from '@prisma/client';
 import type EmailService from './email.service';
+import DatabaseError from '../errors/databaseError';
 
 class AuthService {
   private FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
@@ -27,9 +28,6 @@ class AuthService {
 
   public async magicLink(email: string): Promise<void> {
     const magicLink = await this.generateMagicLink(email);
-
-    //eslint-disable-next-line no-console
-    console.log(`Magic Link: ${magicLink}`);
 
     try {
       await this.mailer.sendEmail({
@@ -64,6 +62,10 @@ class AuthService {
       throw new Error('No token found for this email');
     }
 
+    if (!user.tokens.some((t) => t.id === foundToken.id)) {
+      throw new Error('User - token mismatch');
+    }
+
     if (!this.validateToken(foundToken)) {
       throw new Error('Token expired');
     }
@@ -81,23 +83,36 @@ class AuthService {
   }
 
   private async generateMagicLink(email: string): Promise<string> {
-    const user = await this.userService.getUserByEmail(email);
-    const token = await this.generateToken(user.id);
+    try {
+      const user = await this.userService.getOrCreateUserByEmail(email);
+      const token = await this.generateToken(user.id);
 
-    return this.FRONTEND_URL + '/auth/magic?token=' + token.token + '&email=' + email;
+      return this.FRONTEND_URL + '/auth/magic?token=' + token.token + '&email=' + email;
+    } catch (e) {
+      if (e instanceof DatabaseError) {
+        throw e;
+      } else {
+        console.error(e);
+        throw new Error(`Unexpected error`);
+      }
+    }
   }
 
   private async generateToken(userId: string): Promise<Token> {
     const tokenString = uuidv4();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
-    return this.prisma.token.create({
-      data: {
-        token: tokenString,
-        userId: userId,
-        expiresAt: expiresAt,
-      },
-    });
+    try {
+      return await this.prisma.token.create({
+        data: {
+          token: tokenString,
+          userId: userId,
+          expiresAt: expiresAt,
+        },
+      });
+    } catch (e) {
+      throw new DatabaseError('Failed to create token ', e);
+    }
   }
 
   private validateToken(token: Token): boolean {
@@ -112,7 +127,7 @@ class AuthService {
       throw new MissingEnvError('JWT_KEY');
     }
 
-    return jwt.sign({ userId: user.id }, JWT_KEY, { expiresIn: 604800000 });
+    return jwt.sign({ userId: user.id }, JWT_KEY, { expiresIn: '7d' });
   }
 }
 
