@@ -1,6 +1,7 @@
 import type { Config } from 'jest';
 
 const config: Config = {
+  displayName: 'api',
   preset: 'ts-jest',
   testEnvironment: 'node',
   clearMocks: true,
