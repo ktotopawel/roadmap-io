@@ -63,7 +63,10 @@ const LoginPage = (): ReactElement => {
   }, [magicLinkStatus]);
 
   return (
-    <div className={'min-h-screen max-w-screen w-full flex flex-col justify-center items-center'}>
+    <div
+      className={'min-h-screen max-w-screen w-full flex flex-col justify-center items-center gap-4'}
+    >
+      <h1 className={'font-sono text-6xl font-bold'}>roadmap-io</h1>
       <div
         className={
           'p-4 rounded-2xl border-2 border-white/20 backdrop-blur-2xl bg-white/10 flex flex-col gap-2'
@@ -114,7 +117,7 @@ const LoginPage = (): ReactElement => {
                 'max-w-lg p-6 rounded-2xl border-2 border-white/20 backdrop-blur-2xl bg-white/5 text-white'
               }
             >
-              <div className={'flex gap-4 items-center'}>
+              <div className={'flex gap-2 items-center'}>
                 {modalContent?.icon}
                 <DialogTitle className={'font-semibold text-xl'}>{modalContent?.title}</DialogTitle>
               </div>
