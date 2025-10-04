@@ -29,6 +29,10 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction): Pro
 
     const decoded = jwt.verify(token, jwtSecretKey) as JwtPayload;
 
+    if (!decoded.userId) {
+      res.status(ServerStatuses.UNAUTHORIZED).json({ message: 'Invalid token payload' });
+    }
+
     req.user = await userService.getUserById(decoded.userId);
 
     next();
