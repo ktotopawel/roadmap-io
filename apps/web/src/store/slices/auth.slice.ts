@@ -17,12 +17,14 @@ interface IAuthState {
     email: string;
   } | null;
   status: StatusKeys;
+  magicLinkStatus: StatusKeys;
 }
 
 const initialState: IAuthState = {
   isAuthenticated: false,
   user: null,
   status: StatusEnum.IDLE,
+  magicLinkStatus: StatusEnum.IDLE,
 };
 
 const getMagicLink = createAsyncThunk(
@@ -79,6 +81,15 @@ const authSlice = createSlice({
     });
     builder.addCase(fetchUser.fulfilled, (state) => {
       state.isAuthenticated = true;
+    });
+    builder.addCase(getMagicLink.pending, (state) => {
+      state.magicLinkStatus = StatusEnum.LOADING;
+    });
+    builder.addCase(getMagicLink.fulfilled, (state) => {
+      state.magicLinkStatus = StatusEnum.SUCCEEDED;
+    });
+    builder.addCase(getMagicLink.rejected, (state) => {
+      state.magicLinkStatus = StatusEnum.FAILED;
     });
   },
 });

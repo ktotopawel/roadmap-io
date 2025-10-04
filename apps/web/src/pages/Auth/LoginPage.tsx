@@ -1,5 +1,5 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
-import { type ReactElement, useEffect } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import { AtIcon, PaperPlaneTiltIcon } from '@phosphor-icons/react';
 import InputWithIcon from '../../components/InputWithIcon.tsx';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +10,9 @@ import { LoginPayloadSchema } from '@roadmap-io/types';
 import { fetchUser } from '../../store/slices/user.slice.ts';
 import { useNavigate } from 'react-router-dom';
 import AppRoutes from '../../config/constants/AppRoutes.ts';
+import statusEnum from '../../config/Status.enum.ts';
+import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
+import { MAGIC_LINK_MODAL_CONTENT, type ModalContent } from '../../config/modalContent.tsx';
 
 interface ILoginForm {
   email: string;
@@ -18,6 +21,10 @@ interface ILoginForm {
 const LoginPage = (): ReactElement => {
   const dispatch = useAppDispatch();
   const navigator = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<ModalContent | null>(null);
+
+  const magicLinkStatus = useAppSelector((state) => state.auth.magicLinkStatus);
 
   const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
 
@@ -46,6 +53,15 @@ const LoginPage = (): ReactElement => {
     }
   }, [isAuth, navigator]);
 
+  useEffect(() => {
+    if (magicLinkStatus === statusEnum.IDLE || magicLinkStatus === statusEnum.LOADING) {
+      setIsOpen(false);
+    } else {
+      setModalContent(MAGIC_LINK_MODAL_CONTENT[magicLinkStatus]);
+      setIsOpen(true);
+    }
+  }, [magicLinkStatus]);
+
   return (
     <div className={'min-h-screen max-w-screen w-full flex flex-col justify-center items-center'}>
       <div
@@ -68,9 +84,12 @@ const LoginPage = (): ReactElement => {
               className={'flex-1'}
               {...register('email')}
             />
-            <BasicButton icon={PaperPlaneTiltIcon} type={'submit'} />
+            <BasicButton
+              icon={PaperPlaneTiltIcon}
+              type={'submit'}
+              loading={magicLinkStatus === statusEnum.LOADING}
+            />
           </div>
-          {/* Smooth expanding error message */}
           <div
             className={`
             grid transition-all duration-300 ease-out
@@ -82,6 +101,27 @@ const LoginPage = (): ReactElement => {
             </div>
           </div>
         </form>
+        <Dialog
+          onClose={() => {
+            setIsOpen(false);
+          }}
+          open={isOpen}
+        >
+          <DialogBackdrop className="fixed inset-0 bg-black/30" />
+          <div className={'fixed inset-0 w-screen flex items-center justify-center p-4'}>
+            <DialogPanel
+              className={
+                'max-w-lg p-6 rounded-2xl border-2 border-white/20 backdrop-blur-2xl bg-white/5 text-white'
+              }
+            >
+              <div className={'flex gap-4 items-center'}>
+                {modalContent?.icon}
+                <DialogTitle className={'font-semibold text-xl'}>{modalContent?.title}</DialogTitle>
+              </div>
+              <Description>{modalContent?.description}</Description>
+            </DialogPanel>
+          </div>
+        </Dialog>
       </div>
     </div>
   );
