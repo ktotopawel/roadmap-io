@@ -1,6 +1,5 @@
 .idea/
 node_modules/
-pnpm-lock.yaml
 .pnpm-store/
 .pnpm-store-v3/
 *.log
@@ -28,3 +27,4 @@ ehthumbs.db
 *.bak
 .cache/
 tmp/
+coverage/
