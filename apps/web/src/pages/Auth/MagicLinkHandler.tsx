@@ -33,14 +33,11 @@ const MagicLinkHandler = (): ReactElement => {
   }, [token, email, dispatch]);
 
   useEffect(() => {
-    void dispatch(fetchUser());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (isAuth) {
+      void dispatch(fetchUser());
       void navigator(AppRoutes.HOME);
     }
-  }, [isAuth, navigator]);
+  }, [isAuth, navigator, dispatch]);
 
   return (
     <div className={'min-h-screen w-full flex justify-center items-center'}>

@@ -1,6 +1,6 @@
 import { type ReactElement } from 'react';
 import { Button, type ButtonProps } from '@headlessui/react';
-import { type IconProps } from '@phosphor-icons/react';
+import { CircleNotchIcon, type IconProps } from '@phosphor-icons/react';
 import * as React from 'react';
 import { clsx } from 'clsx';
 
@@ -9,6 +9,7 @@ interface IBasicButton extends ButtonProps {
   icon?: React.ComponentType<IconProps>;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  loading?: boolean;
 }
 
 const BasicButton = ({
@@ -16,6 +17,7 @@ const BasicButton = ({
   icon: Icon,
   onClick,
   className,
+  loading,
   ...rest
 }: IBasicButton): ReactElement => {
   const isIconOnly = !!Icon && !label;
@@ -31,7 +33,13 @@ const BasicButton = ({
         className
       )}
     >
-      {Icon ? <Icon className={clsx({ 'h-6 w-6': isIconOnly, 'h-5 w-5': !isIconOnly })} /> : null}
+      {loading && Icon ? (
+        <CircleNotchIcon
+          className={clsx({ 'h-6 w-6 animate-spin': isIconOnly, 'h-5 w-5': !isIconOnly })}
+        />
+      ) : Icon ? (
+        <Icon className={clsx({ 'h-6 w-6': isIconOnly, 'h-5 w-5': !isIconOnly })} />
+      ) : null}
       {label ? label : null}
     </Button>
   );
