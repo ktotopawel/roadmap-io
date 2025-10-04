@@ -21,7 +21,7 @@ const MAGIC_LINK_MODAL_CONTENT: Record<
   [StatusEnum.FAILED]: {
     title: 'Failed',
     description: 'Magic link failed to send. Please try again later.',
-    icon: <XCircleIcon className={'fill-red-400'} />,
+    icon: <XCircleIcon className={'fill-red-400 h-6 w-6'} />,
   },
   [StatusEnum.LOADING]: null,
   [StatusEnum.IDLE]: null,
