@@ -27,7 +27,9 @@ export default [
       '**/.next/**',
       '**/coverage/**',
       '**/*.config.js',
+      '**/*.config.ts', // <-- ADDED: This ignores jest.config.ts and other config files outside apps/packages
       '**/api/generated/prisma**',
+      // Removed '**/tsup.config.ts' as it is now covered by '**/*.config.ts'
     ],
   },
 
@@ -63,6 +65,8 @@ export default [
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-unused-vars': 'off', // handled by TS
       '@typescript-eslint/no-unused-vars': ['error'],
+      // This rule requires type information and was failing on jest.config.ts
+      '@typescript-eslint/await-thenable': 'error',
 
       // --- TypeScript strictness ---
       '@typescript-eslint/no-explicit-any': 'error',

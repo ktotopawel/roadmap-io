@@ -14,7 +14,7 @@ apps/web/dist/
 apps/api/prisma/*.db
 apps/api/prisma/*.sqlite
 apps/api/node_modules/@prisma/client/
-.env
+apps/api/.env
 .env.local
 .env.production
 .env.development
@@ -27,4 +27,5 @@ ehthumbs.db
 *.bak
 .cache/
 tmp/
+*/.env.*
 coverage/

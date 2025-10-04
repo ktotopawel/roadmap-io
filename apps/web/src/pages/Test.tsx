@@ -4,20 +4,18 @@ import selectActiveRoadmap from '../store/selectors/roadmap.selector.ts';
 import type { ReactElement } from 'react';
 
 const Test = (): ReactElement => {
-  const roadmaps = useAppSelector((state) => state.roadmaps);
-  const goals = useAppSelector((state) => state.goals);
-  const tasks = useAppSelector((state) => state.tasks);
+  const state = useAppSelector((state) => state);
 
   const dispatch = useAppDispatch();
-  const handleGetData = () => {
-    dispatch(fetchRoadmaps());
+  const handleGetData = (): void => {
+    void dispatch(fetchRoadmaps());
   };
 
   const handleSelect = (id: string): void => {
     dispatch(setActiveRoadmap(id));
   };
 
-  const selectedRoadmap = selectActiveRoadmap({ roadmaps, goals, tasks });
+  const selectedRoadmap = selectActiveRoadmap(state);
 
   return (
     <div>
@@ -25,7 +23,7 @@ const Test = (): ReactElement => {
       <button onClick={handleGetData}>get data</button>
 
       <ul>
-        {Object.values(roadmaps.roadmaps.byId).map((roadmap) => (
+        {Object.values(state.roadmaps.roadmaps.byId).map((roadmap) => (
           <li>
             <h3>{roadmap.title}</h3>
             <button

@@ -37,7 +37,14 @@ const selectActiveRoadmap = createSelector(
           updatedAt: new Date(goal.updatedAt),
           roadmapId: goal.roadmapId,
           subgoals: denormalizeGoals(goal.subgoalIds),
-          tasks: goal.taskIds.map((taskId) => tasksById[taskId]),
+          tasks: goal.taskIds.map((taskId) => {
+            const task = tasksById[taskId];
+
+            return {
+              ...task,
+              dueDate: task.dueDate ? new Date(task.dueDate) : null,
+            };
+          }),
         };
 
         goalArr.push(denormalizedGoal);

@@ -2,9 +2,15 @@ const ServerRoutes = {
   api: '/api',
   goals: '/goals',
   roadmaps: '/roadmaps',
+  users: {
+    base: '/users',
+    me: '/me',
+    email: '/email',
+  },
   auth: {
-    magicLink: '/auth/magic-link',
-    consumeToken: '/auth/consume-token',
+    base: '/auth',
+    magicLink: '/magic-link',
+    consumeToken: '/consume-token',
   },
 };
 

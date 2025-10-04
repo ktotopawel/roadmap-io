@@ -2,15 +2,19 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-    "rootDir": "./",
-    "outDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "dist",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@roadmap-io/types": ["../types/dist"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src"],
+    "types": ["jest", "node"]
   },
-  "include": ["src/**/*", "prisma/**/*"]
+  "include": ["src/**/*", "prisma/**/*"],
+  "files": ["src/types/express/express.d.ts"]
 }
