@@ -12,17 +12,9 @@
     "paths": {
       "@roadmap-io/types": ["../types/dist"]
     },
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src"
-    ],
+    "typeRoots": ["./node_modules/@types", "./src"],
     "types": ["jest", "node"]
   },
-  "include": [
-    "src/**/*",
-    "prisma/**/*"
-  ],
-  "files": [
-    "src/types/express/express.d.ts"
-  ]
+  "include": ["src/**/*", "prisma/**/*"],
+  "files": ["src/types/express/express.d.ts"]
 }
