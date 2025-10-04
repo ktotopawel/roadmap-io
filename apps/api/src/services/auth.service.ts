@@ -37,6 +37,7 @@ class AuthService {
       });
     } catch (e) {
       console.error('Magic Link Error', e);
+      throw new Error('Failed to send magic link email');
     }
   }
 
