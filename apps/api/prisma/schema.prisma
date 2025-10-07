@@ -25,6 +25,7 @@ model Goal {
   Roadmap     Roadmap  @relation(fields: [roadmapId], references: [id])
   roadmapId   String
   description String
+  required    Boolean
 }
 
 model Task {

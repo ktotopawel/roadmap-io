@@ -12,7 +12,8 @@ class GoalService {
   public async createGoal(
     title: string,
     roadmapId: string,
-    description: string
+    description: string,
+    required: boolean
   ): Promise<Omit<Goal, 'subgoals' | 'tasks'>> {
     try {
       return await this.prisma.goal.create({
@@ -21,6 +22,7 @@ class GoalService {
           parentId: null,
           roadmapId: roadmapId,
           description: description,
+          required: required,
         },
       });
     } catch (error) {
