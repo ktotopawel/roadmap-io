@@ -22,7 +22,7 @@ class GoalController {
     const { title, roadmapId, description, required } = parsedBody.data;
 
     try {
-      const goal = await this.goalService.createGoal(title, roadmapId, description, required);
+      const goal = await this.goalService.createGoal(title, roadmapId, required, description);
       res.status(ServerStatuses.OK).json({ message: 'Success', goal: goal });
     } catch (e) {
       console.error('Error creating goal, Error: ', e);

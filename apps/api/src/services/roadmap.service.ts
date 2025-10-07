@@ -16,14 +16,14 @@ class RoadmapService {
   public async createRoadmap(
     title: string,
     userId: string,
-    description: string
+    description?: string
   ): Promise<Omit<Roadmap, 'goals'>> {
     try {
       return await this.prisma.roadmap.create({
         data: {
           title: title,
           userId: userId,
-          description: description,
+          description: description ?? null,
         },
       });
     } catch (e) {

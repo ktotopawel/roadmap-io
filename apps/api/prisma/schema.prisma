@@ -24,7 +24,7 @@ model Goal {
   subGoals    Goal[]   @relation("GoalToSubGoals")
   Roadmap     Roadmap  @relation(fields: [roadmapId], references: [id])
   roadmapId   String
-  description String
+  description String?
   required    Boolean
 }
 
@@ -35,7 +35,7 @@ model Task {
   status      String    @default("TODO")
   goal        Goal      @relation(fields: [goalId], references: [id])
   dueDate     DateTime?
-  description String
+  description String?
 }
 
 model Roadmap {
@@ -46,7 +46,7 @@ model Roadmap {
   updatedAt   DateTime @updatedAt
   goals       Goal[]
   User        User     @relation(fields: [userId], references: [id])
-  description String
+  description String?
 }
 
 model User {
