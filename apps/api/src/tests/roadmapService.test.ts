@@ -87,6 +87,7 @@ describe('RoadmapService', () => {
           title: true,
           createdAt: true,
           updatedAt: true,
+          description: true,
         },
       });
 
