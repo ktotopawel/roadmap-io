@@ -14,35 +14,39 @@ datasource db {
 }
 
 model Goal {
-  id        String   @id @default(cuid())
-  title     String
-  parentId  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tasks     Task[]
-  parent    Goal?    @relation("GoalToSubGoals", fields: [parentId], references: [id])
-  subGoals  Goal[]   @relation("GoalToSubGoals")
-  Roadmap   Roadmap  @relation(fields: [roadmapId], references: [id])
-  roadmapId String
+  id          String   @id @default(cuid())
+  title       String
+  parentId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tasks       Task[]
+  parent      Goal?    @relation("GoalToSubGoals", fields: [parentId], references: [id])
+  subGoals    Goal[]   @relation("GoalToSubGoals")
+  Roadmap     Roadmap  @relation(fields: [roadmapId], references: [id])
+  roadmapId   String
+  description String?
+  required    Boolean
 }
 
 model Task {
-  id      String    @id @default(cuid())
-  goalId  String
-  title   String
-  status  String    @default("TODO")
-  goal    Goal      @relation(fields: [goalId], references: [id])
-  dueDate DateTime?
+  id          String    @id @default(cuid())
+  goalId      String
+  title       String
+  status      String    @default("TODO")
+  goal        Goal      @relation(fields: [goalId], references: [id])
+  dueDate     DateTime?
+  description String?
 }
 
 model Roadmap {
-  id        String   @id @default(cuid())
-  userId    String
-  title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  goals     Goal[]
-  User      User     @relation(fields: [userId], references: [id])
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  goals       Goal[]
+  User        User     @relation(fields: [userId], references: [id])
+  description String?
 }
 
 model User {
