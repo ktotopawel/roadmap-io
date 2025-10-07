@@ -24,7 +24,7 @@ describe('GoalService', () => {
 
       prismaMock.goal.create.mockResolvedValue(createdGoal);
 
-      const result = await goalService.createGoal('My Goal', 'r1', 'test', false);
+      const result = await goalService.createGoal('My Goal', 'r1', false, 'test');
 
       expect(prismaMock.goal.create).toHaveBeenCalledWith({
         data: {
