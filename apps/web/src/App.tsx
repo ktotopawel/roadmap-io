@@ -1,4 +1,4 @@
-import Router from './Router';
+import Router from './router.tsx';
 import type { ReactElement } from 'react';
 
 function App(): ReactElement {
