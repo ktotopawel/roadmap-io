@@ -24,14 +24,15 @@ describe('RoadmapService', () => {
         userId: 'user1',
         createdAt: new Date(),
         updatedAt: new Date(),
+        description: 'test',
       };
 
       prismaMock.roadmap.create.mockResolvedValue(roadmap);
 
-      const result = await roadmapService.createRoadmap('My Roadmap', 'user1');
+      const result = await roadmapService.createRoadmap('My Roadmap', 'user1', 'test');
 
       expect(prismaMock.roadmap.create).toHaveBeenCalledWith({
-        data: { title: 'My Roadmap', userId: 'user1' },
+        data: { title: 'My Roadmap', userId: 'user1', description: 'test' },
       });
       expect(result).toEqual(roadmap);
     });
@@ -46,6 +47,7 @@ describe('RoadmapService', () => {
           title: 'R1',
           createdAt: new Date(),
           updatedAt: new Date(),
+          description: 'test',
         },
       ];
 
@@ -64,10 +66,13 @@ describe('RoadmapService', () => {
               status: 'TODO',
               goalId: 'g1',
               dueDate: new Date(Date.now() + 100 * 60 * 60 * 24 * 7),
+              description: 'test',
             },
           ],
           createdAt: new Date(),
           updatedAt: new Date(),
+          description: 'test',
+          required: false,
         },
       ];
 
