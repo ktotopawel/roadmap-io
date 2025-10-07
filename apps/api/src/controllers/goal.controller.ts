@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import ServerStatuses from '../config/serverStatuses';
 import type GoalService from '../services/goal.service';
-import { GoalPayload } from '@roadmap-io/types';
+import { CreateGoalPayload } from '@roadmap-io/types';
 import UnimplementedError from '../errors/unimplementedError';
 
 class GoalController {
@@ -12,17 +12,17 @@ class GoalController {
   }
 
   public createGoal = async (req: Request, res: Response): Promise<void> => {
-    const parsedBody = GoalPayload.safeParse(req.body);
+    const parsedBody = CreateGoalPayload.safeParse(req.body);
 
     if (!parsedBody.success) {
       res.status(ServerStatuses.BAD_REQUEST).json({ Error: parsedBody.error });
       return;
     }
 
-    const { title, roadmapId } = parsedBody.data;
+    const { title, roadmapId, description } = parsedBody.data;
 
     try {
-      const goal = await this.goalService.createGoal(title, roadmapId);
+      const goal = await this.goalService.createGoal(title, roadmapId, description);
       res.status(ServerStatuses.OK).json({ message: 'Success', goal: goal });
     } catch (e) {
       console.error('Error creating goal, Error: ', e);

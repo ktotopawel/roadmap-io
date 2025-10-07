@@ -20,10 +20,10 @@ class RoadmapController {
       return;
     }
 
-    const { title, userId } = parsedBody.data;
+    const { title, userId, description } = parsedBody.data;
 
     try {
-      const roadmap = await this.roadmapService.createRoadmap(title, userId);
+      const roadmap = await this.roadmapService.createRoadmap(title, userId, description);
       res.status(ServerStatuses.OK).json({ message: 'Success', roadmap: roadmap });
     } catch (e) {
       console.error(e);

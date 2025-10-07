@@ -7,6 +7,7 @@ export const RoadmapSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   goals: z.array(GoalSchema),
+  description: z.string(),
 });
 
 export type Roadmap = z.infer<typeof RoadmapSchema>;
@@ -14,6 +15,7 @@ export type Roadmap = z.infer<typeof RoadmapSchema>;
 export const roadmapPayload = z.object({
   title: z.string().min(1, "The title can't be empty"),
   userId: z.cuid(),
+  description: z.string(),
 });
 
 export type RoadmapPayload = z.infer<typeof roadmapPayload>;
