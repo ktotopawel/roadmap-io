@@ -64,7 +64,9 @@ const LoginPage = (): ReactElement => {
 
   return (
     <div
-      className={'min-h-screen max-w-screen w-full flex flex-col justify-center items-center gap-4'}
+      className={
+        'min-h-screen max-w-screen w-full flex flex-col justify-center items-center gap-4 bg-neutral-900 text-white'
+      }
     >
       <h1 className={'font-sono text-6xl font-bold'}>roadmap-io</h1>
       <div
