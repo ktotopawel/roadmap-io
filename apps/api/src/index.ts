@@ -1,10 +1,4 @@
 // import type {} from './types/express/express';
-import type { Express } from 'express';
-import express from 'express';
-import cors from 'cors';
-import apiRouter from './router';
-import serverRoutes from './config/serverRoutes';
-import cookieParser from 'cookie-parser';
 import DotenvFlow from 'dotenv-flow';
 
 DotenvFlow.config({
@@ -13,6 +7,13 @@ DotenvFlow.config({
   default_node_env: 'development',
   debug: process.env.NODE_ENV === 'development',
 });
+
+import type { Express } from 'express';
+import express from 'express';
+import cors from 'cors';
+import apiRouter from './router';
+import serverRoutes from './config/serverRoutes';
+import cookieParser from 'cookie-parser';
 
 const app: Express = express();
 const port = process.env.PORT || '3000';

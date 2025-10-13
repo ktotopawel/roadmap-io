@@ -12,11 +12,11 @@ class EmailService {
     const apiKey = process.env.RESEND_API_KEY;
 
     if (!apiKey) {
-      throw new MissingEnvError('Missing nodemailer api key');
+      throw new MissingEnvError('Missing RESEND_API_KEY env variable');
     }
 
     if (!process.env.RESEND_FROM) {
-      throw new MissingEnvError('Missing nodemailer "from" env variable');
+      throw new MissingEnvError('Missing RESEND_FROM env variable');
     }
 
     this.from = process.env.RESEND_FROM;
