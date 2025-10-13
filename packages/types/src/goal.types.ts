@@ -14,6 +14,8 @@ export type Goal = {
   subgoals: Goal[];
   description: string | null;
   required: boolean;
+  done: boolean;
+  complexity: number;
 };
 
 export const GoalSchema: z.ZodType<Goal> = z.object({
@@ -27,6 +29,8 @@ export const GoalSchema: z.ZodType<Goal> = z.object({
   subgoals: z.lazy(() => z.array(GoalSchema)),
   description: z.string().min(1, 'Description should have at least 1 character.').nullable(),
   required: z.boolean(),
+  done: z.boolean().default(false),
+  complexity: z.number().min(1).max(3),
 });
 
 export const CreateGoalPayload = z.object({
@@ -34,6 +38,7 @@ export const CreateGoalPayload = z.object({
   roadmapId: z.cuid(),
   description: z.string().min(1).optional(),
   required: z.boolean(),
+  complexity: z.number().min(1).max(3),
 });
 
 export type CreateGoalPayload = z.infer<typeof CreateGoalPayload>;

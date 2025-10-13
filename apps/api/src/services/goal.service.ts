@@ -13,6 +13,7 @@ class GoalService {
     title: string,
     roadmapId: string,
     required: boolean,
+    complexity: number,
     description?: string
   ): Promise<Omit<Goal, 'subgoals' | 'tasks'>> {
     try {
@@ -23,6 +24,7 @@ class GoalService {
           roadmapId: roadmapId,
           description: description ?? null,
           required: required,
+          complexity: complexity,
         },
       });
     } catch (error) {

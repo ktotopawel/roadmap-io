@@ -26,6 +26,8 @@ model Goal {
   roadmapId   String
   description String?
   required    Boolean
+  done        Boolean  @default(false)
+  complexity  Int      @default(1)
 }
 
 model Task {
@@ -36,6 +38,8 @@ model Task {
   goal        Goal      @relation(fields: [goalId], references: [id])
   dueDate     DateTime?
   description String?
+  done        Boolean   @default(false)
+  complexity  Int       @default(1)
 }
 
 model Roadmap {

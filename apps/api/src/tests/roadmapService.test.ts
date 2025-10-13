@@ -67,12 +67,16 @@ describe('RoadmapService', () => {
               goalId: 'g1',
               dueDate: new Date(Date.now() + 100 * 60 * 60 * 24 * 7),
               description: 'test',
+              complexity: 1,
+              done: false,
             },
           ],
           createdAt: new Date(),
           updatedAt: new Date(),
           description: 'test',
           required: false,
+          done: false,
+          complexity: 1,
         },
       ];
 
