@@ -8,11 +8,18 @@ import type {
 import api from '../../utils/axios.ts';
 import { API_ENDPOINTS } from '../../config/api.ts';
 import * as z from 'zod';
-import { type Goal, type Roadmap, RoadmapSchema } from '@roadmap-io/types';
+import {
+  type Goal,
+  type Roadmap,
+  RoadmapListReturn,
+  type RoadmapListReturnType,
+  RoadmapSchema,
+} from '@roadmap-io/types';
 import StatusEnum, { type StatusKeys } from '../../config/Status.enum.ts';
 
 interface RoadmapsState {
   roadmaps: NormalizedEntities<NormalizedRoadmap>;
+  roadmapsList?: RoadmapListReturnType[];
   activeRoadmapId: string;
   status: StatusKeys;
   error: string | null;
@@ -23,6 +30,7 @@ const initialState: RoadmapsState = {
     byId: {},
     allIds: [],
   },
+  roadmapsList: [],
   activeRoadmapId: '',
   status: StatusEnum.IDLE,
   error: null,
@@ -100,6 +108,27 @@ const fetchRoadmaps = createAsyncThunk('roadmaps/fetchRoadmaps', async (_, thunk
   }
 });
 
+const fetchRoadmapList = createAsyncThunk('roadmaps/fetchRoadmapList', async (_, thunkAPI) => {
+  try {
+    const response = await api.get<{ message: string; roadmaps: RoadmapListReturnType[] }>(
+      API_ENDPOINTS.ROADMAPS_LIST
+    );
+    const responseData = response.data;
+
+    const validateResult = z.array(RoadmapListReturn).safeParse(responseData.roadmaps);
+
+    if (!validateResult.success) {
+      console.error('Validation error:', validateResult.error);
+      return thunkAPI.rejectWithValue('Data validation error');
+    }
+
+    return validateResult.data;
+  } catch (e) {
+    console.error('Fetch error:', e);
+    return thunkAPI.rejectWithValue('Fetch error');
+  }
+});
+
 const roadmapsSlice = createSlice({
   name: 'roadmaps',
   initialState,
@@ -124,11 +153,22 @@ const roadmapsSlice = createSlice({
       state.error = action.error.message || 'Failed to fetch roadmaps: unknown error';
       state.status = StatusEnum.FAILED;
     });
+    builder.addCase(fetchRoadmapList.pending, (state) => {
+      state.status = StatusEnum.LOADING;
+    });
+    builder.addCase(fetchRoadmapList.fulfilled, (state, action) => {
+      state.roadmapsList = action.payload;
+      state.status = StatusEnum.SUCCEEDED;
+    });
+    builder.addCase(fetchRoadmapList.rejected, (state, action) => {
+      state.error = action.error.message || 'Failed to fetch roadmap list: unknown error';
+      state.status = StatusEnum.FAILED;
+    });
   },
 });
 
 export const { clearState, setActiveRoadmap, setRoadmaps } = roadmapsSlice.actions;
 
-export { fetchRoadmaps };
+export { fetchRoadmaps, fetchRoadmapList };
 
 export default roadmapsSlice.reducer;
