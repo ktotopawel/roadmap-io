@@ -45,34 +45,40 @@ class GoalService {
     }
   }
 
-  // note: this is highly inefficient, but works for now
-  // either cache or calculate at fetch
   public async getGoalComplexity(goalId: string): Promise<number> {
-    try {
-      const goal = await this.prisma.goal.findUnique({
-        where: { id: goalId },
-      });
+    const goal = await this.prisma.goal.findUnique({
+      where: { id: goalId },
+    });
 
-      if (!goal) {
-        throw new DatabaseError('Error fetching goal', goalId);
+    if (!goal) {
+      throw new DatabaseError('Goal not found', null);
+    }
+
+    // get all goals for the "owner" roadmap - much better way than recursive queries
+    const goalsFromParentRoadmap = await this.prisma.goal.findMany({
+      where: {
+        roadmapId: goal.roadmapId,
+      },
+    });
+
+    const goalMap = new Map(goalsFromParentRoadmap.map((g) => [g.id, g]));
+
+    const calculateComplexity = (currentGoalId: string): number => {
+      const currentGoal = goalMap.get(currentGoalId);
+      if (!currentGoal) {
+        return 0;
       }
 
-      const subgoals = await this.prisma.goal.findMany({
-        where: { parentId: goalId },
-      });
+      const subgoals = goalsFromParentRoadmap.filter((g) => g.parentId === currentGoalId);
 
       if (subgoals.length === 0) {
-        return goal.complexity;
+        return currentGoal.complexity;
+      } else {
+        return subgoals.reduce((acc, goal) => acc + calculateComplexity(goal.id), 0);
       }
+    };
 
-      return await Promise.all(
-        subgoals.map(async (sg) => await this.getGoalComplexity(sg.id))
-      ).then((values) => values.reduce((acc, cur) => acc + cur, 0));
-    } catch (e) {
-      // todo implement error handling
-      console.error(e);
-      throw e;
-    }
+    return calculateComplexity(goalId);
   }
 }
 
