@@ -30,7 +30,7 @@ export const GoalSchema: z.ZodType<Goal> = z.object({
   description: z.string().min(1, 'Description should have at least 1 character.').nullable(),
   required: z.boolean(),
   done: z.boolean().default(false),
-  complexity: z.number().min(1).max(3),
+  complexity: z.number().min(1).max(5),
 });
 
 export const CreateGoalPayload = z.object({
