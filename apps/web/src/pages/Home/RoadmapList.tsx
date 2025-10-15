@@ -24,15 +24,17 @@ const RoadmapList = (): ReactElement => {
         </div>
       )}
       {!isLoading && roadmapList && roadmapList.length !== 0 ? (
-        roadmapList.map((r) => (
-          <RoadmapListEntry
-            title={r.title}
-            description={r.description}
-            complexity={r.relativeComplexity}
-            progress={r.progress}
-            key={r.id}
-          />
-        ))
+        <div className={'grid grid-cols-3 gap-2'}>
+          {roadmapList.map((r) => (
+            <RoadmapListEntry
+              title={r.title}
+              description={r.description}
+              complexity={r.relativeComplexity}
+              progress={r.progress}
+              key={r.id}
+            />
+          ))}
+        </div>
       ) : (
         <div className="">
           <XCircleIcon className={'fill-red-500'} />
