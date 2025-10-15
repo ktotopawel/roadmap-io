@@ -72,12 +72,11 @@ class RoadmapController {
       res.status(ServerStatuses.BAD_REQUEST).json({ error: 'No roadmap ID provided' });
     }
 
-    if (
-      !(await this.roadmapService.getRoadmapList(user.id)).some(
-        (roadmap) => roadmap.id === roadmapId
-      )
-    ) {
-      res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Roadmap does not belong to user' });
+    if (!(await this.roadmapService.isUserOwnerOfRoadmap(user.id, roadmapId))) {
+      res
+        .status(ServerStatuses.UNAUTHORIZED)
+        .json({ error: 'User not authorized to access this roadmap' });
+      return;
     }
 
     try {

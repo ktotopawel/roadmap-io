@@ -52,6 +52,21 @@ class RoadmapService {
     }
   }
 
+  public async isUserOwnerOfRoadmap(userId: string, roadmapId: string): Promise<boolean> {
+    try {
+      const roadmap = await this.prisma.roadmap.findUnique({
+        where: {
+          id: roadmapId,
+          userId: userId,
+        },
+      });
+
+      return roadmap !== null;
+    } catch (e) {
+      throw new DatabaseError('Error getting roadmap by ID', e);
+    }
+  }
+
   public async getRoadmapList(userId: string): Promise<RoadmapListReturnType[]> {
     try {
       const roadmaps = await this.prisma.roadmap.findMany({
