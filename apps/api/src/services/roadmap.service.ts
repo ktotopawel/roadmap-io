@@ -81,11 +81,15 @@ class RoadmapService {
 
           const totalComplexity = goals.reduce((acc, goal) => acc + goal.complexity, 0);
           const maxComplexity = goals.length * 5;
-          const donePercent = Math.round(
-            (goals.reduce((acc, goal) => acc + (goal.done ? 1 : 0), 0) / goals.length) * 100
-          );
+          const donePercent =
+            goals.length !== 0
+              ? Math.round(
+                  (goals.reduce((acc, goal) => acc + (goal.done ? 1 : 0), 0) / goals.length) * 100
+                )
+              : 0;
 
-          const relativeComplexity = Math.round((totalComplexity / maxComplexity) * 5);
+          const relativeComplexity =
+            maxComplexity !== 0 ? Math.round((totalComplexity / maxComplexity) * 5) : 0;
 
           return {
             ...roadmap,
