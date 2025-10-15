@@ -100,7 +100,7 @@ class RoadmapService {
       );
     } catch (e) {
       console.error(e);
-      throw new DatabaseError('Error getting roadmap by ID', e);
+      throw new DatabaseError('Error getting roadmap list', e);
     }
   }
 
