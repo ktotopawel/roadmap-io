@@ -81,7 +81,7 @@ class RoadmapController {
     }
 
     try {
-      const roadmap = await this.roadmapService.getRoadmapById(user.id);
+      const roadmap = await this.roadmapService.getRoadmapById(roadmapId);
       res.status(ServerStatuses.OK).json({ message: 'Success', roadmap: roadmap });
     } catch (e) {
       console.error(e);

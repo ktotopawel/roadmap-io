@@ -65,8 +65,9 @@ class RoadmapService {
           const goals = await this.goalsService.getGoalsByRoadmapId(roadmap.id);
 
           const totalComplexity = goals.reduce((acc, goal) => acc + goal.complexity, 0);
-          const donePercent =
-            goals.reduce((acc, goal) => acc + (goal.done ? 1 : 0), 0) / goals.length;
+          const donePercent = Math.round(
+            (goals.reduce((acc, goal) => acc + (goal.done ? 1 : 0), 0) / goals.length) * 100
+          );
 
           return { ...roadmap, totalComplexity: totalComplexity, progress: donePercent };
         })
