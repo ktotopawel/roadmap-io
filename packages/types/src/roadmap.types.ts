@@ -31,7 +31,7 @@ export const RoadmapListReturn = RoadmapSchema.pick({
   title: true,
   description: true,
 }).extend({
-  totalComplexity: z.number().min(1),
+  relativeComplexity: z.number().min(1).max(5),
   progress: z.number().min(0).max(100),
 });
 
