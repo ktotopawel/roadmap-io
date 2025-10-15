@@ -70,6 +70,7 @@ class RoadmapController {
 
     if (!roadmapId) {
       res.status(ServerStatuses.BAD_REQUEST).json({ error: 'No roadmap ID provided' });
+      return;
     }
 
     if (!(await this.roadmapService.isUserOwnerOfRoadmap(user.id, roadmapId))) {
