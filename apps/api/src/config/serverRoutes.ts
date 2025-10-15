@@ -1,7 +1,7 @@
 const ServerRoutes = {
   api: '/api',
-  goals: '/goals',
-  roadmaps: '/roadmaps',
+  goals: { base: '/goals' },
+  roadmaps: { base: '/roadmaps', list: '/list', byId: '/:id' },
   users: {
     base: '/users',
     me: '/me',

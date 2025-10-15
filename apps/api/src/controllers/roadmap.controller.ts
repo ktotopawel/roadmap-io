@@ -51,6 +51,43 @@ class RoadmapController {
       res.status(ServerStatuses.BACKEND_ERROR).json({ error: 'Failed to get roadmaps' });
     }
   };
+
+  public getRoadmapList = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user;
+
+    try {
+      const list = await this.roadmapService.getRoadmapList(user.id);
+      res.status(ServerStatuses.OK).json({ message: 'Success', roadmaps: list });
+    } catch (e) {
+      console.error(e);
+      res.status(ServerStatuses.BACKEND_ERROR).json({ error: 'Failed to get roadmaps' });
+    }
+  };
+
+  public getRoadmapById = async (req: Request, res: Response): Promise<void> => {
+    const user = req.user;
+    const roadmapId = req.params.id;
+
+    if (!roadmapId) {
+      res.status(ServerStatuses.BAD_REQUEST).json({ error: 'No roadmap ID provided' });
+    }
+
+    if (
+      !(await this.roadmapService.getRoadmapList(user.id)).some(
+        (roadmap) => roadmap.id === roadmapId
+      )
+    ) {
+      res.status(ServerStatuses.BAD_REQUEST).json({ error: 'Roadmap does not belong to user' });
+    }
+
+    try {
+      const roadmap = await this.roadmapService.getRoadmapById(user.id);
+      res.status(ServerStatuses.OK).json({ message: 'Success', roadmap: roadmap });
+    } catch (e) {
+      console.error(e);
+      res.status(ServerStatuses.BACKEND_ERROR).json({ error: 'Failed to get roadmap' });
+    }
+  };
 }
 
 export default RoadmapController;

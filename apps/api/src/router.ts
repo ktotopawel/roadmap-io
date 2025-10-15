@@ -6,8 +6,8 @@ import asyncHandler from './middleware/asyncHandler';
 
 const router = Router();
 
-router.use(serverRoutes.roadmaps, asyncHandler(verifyToken), roadmapRouter);
-router.use(serverRoutes.goals, asyncHandler(verifyToken), goalsRouter);
+router.use(serverRoutes.roadmaps.base, asyncHandler(verifyToken), roadmapRouter);
+router.use(serverRoutes.goals.base, asyncHandler(verifyToken), goalsRouter);
 router.use(serverRoutes.users.base, asyncHandler(verifyToken), usersRouter);
 router.use(serverRoutes.auth.base, authRouter);
 

@@ -62,7 +62,7 @@ describe('GoalService', () => {
 
       prismaMock.goal.findMany.mockResolvedValue(mockGoals);
 
-      const result = await goalService.getGoalByRoadmapId('r1');
+      const result = await goalService.getGoalsByRoadmapId('r1');
 
       expect(prismaMock.goal.findMany).toHaveBeenCalledWith({
         where: { roadmapId: 'r1' },
