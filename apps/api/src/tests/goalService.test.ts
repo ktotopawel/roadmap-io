@@ -20,11 +20,13 @@ describe('GoalService', () => {
         updatedAt: new Date(),
         description: 'test',
         required: false,
+        done: false,
+        complexity: 1,
       };
 
       prismaMock.goal.create.mockResolvedValue(createdGoal);
 
-      const result = await goalService.createGoal('My Goal', 'r1', false, 'test');
+      const result = await goalService.createGoal('My Goal', 'r1', false, 1, 'test');
 
       expect(prismaMock.goal.create).toHaveBeenCalledWith({
         data: {
@@ -33,6 +35,7 @@ describe('GoalService', () => {
           roadmapId: 'r1',
           description: 'test',
           required: false,
+          complexity: 1,
         },
       });
       expect(result).toEqual(createdGoal);
@@ -52,12 +55,14 @@ describe('GoalService', () => {
           tasks: [{ id: 't1', title: 'Task 1', status: 'TODO', goalId: 'g1' }],
           description: 'test',
           required: false,
+          done: false,
+          complexity: 1,
         },
       ];
 
       prismaMock.goal.findMany.mockResolvedValue(mockGoals);
 
-      const result = await goalService.getGoalByRoadmapId('r1');
+      const result = await goalService.getGoalsByRoadmapId('r1');
 
       expect(prismaMock.goal.findMany).toHaveBeenCalledWith({
         where: { roadmapId: 'r1' },

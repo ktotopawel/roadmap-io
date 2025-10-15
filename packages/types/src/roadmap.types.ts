@@ -25,3 +25,14 @@ export const getRoadmapsPayload = z.object({
 });
 
 export type GetRoadmapsPayload = z.infer<typeof getRoadmapsPayload>;
+
+export const RoadmapListReturn = RoadmapSchema.pick({
+  id: true,
+  title: true,
+  description: true,
+}).extend({
+  relativeComplexity: z.number().min(1).max(5),
+  progress: z.number().min(0).max(100),
+});
+
+export type RoadmapListReturnType = z.infer<typeof RoadmapListReturn>;

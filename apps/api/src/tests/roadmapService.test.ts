@@ -6,11 +6,11 @@ import type GoalService from '../services/goal.service';
 
 describe('RoadmapService', () => {
   let roadmapService: RoadmapService;
-  let goalsServiceMock: { getGoalByRoadmapId: jest.Mock };
+  let goalsServiceMock: { getGoalsByRoadmapId: jest.Mock };
 
   beforeEach(() => {
     goalsServiceMock = {
-      getGoalByRoadmapId: jest.fn(),
+      getGoalsByRoadmapId: jest.fn(),
     };
 
     roadmapService = new RoadmapService(prismaMock, goalsServiceMock as unknown as GoalService);
@@ -67,16 +67,20 @@ describe('RoadmapService', () => {
               goalId: 'g1',
               dueDate: new Date(Date.now() + 100 * 60 * 60 * 24 * 7),
               description: 'test',
+              complexity: 1,
+              done: false,
             },
           ],
           createdAt: new Date(),
           updatedAt: new Date(),
           description: 'test',
           required: false,
+          done: false,
+          complexity: 1,
         },
       ];
 
-      goalsServiceMock.getGoalByRoadmapId.mockResolvedValue(mockGoals);
+      goalsServiceMock.getGoalsByRoadmapId.mockResolvedValue(mockGoals);
 
       const result = await roadmapService.getRoadmaps('user1');
 
@@ -91,7 +95,7 @@ describe('RoadmapService', () => {
         },
       });
 
-      expect(goalsServiceMock.getGoalByRoadmapId).toHaveBeenCalledWith('r1');
+      expect(goalsServiceMock.getGoalsByRoadmapId).toHaveBeenCalledWith('r1');
 
       expect(result).toEqual([
         {
