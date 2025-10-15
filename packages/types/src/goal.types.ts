@@ -38,7 +38,7 @@ export const CreateGoalPayload = z.object({
   roadmapId: z.cuid(),
   description: z.string().min(1).optional(),
   required: z.boolean(),
-  complexity: z.number().min(1).max(3),
+  complexity: z.number().min(1).max(5),
 });
 
 export type CreateGoalPayload = z.infer<typeof CreateGoalPayload>;

@@ -8,7 +8,7 @@ export const TaskSchema = z.object({
   dueDate: z.coerce.date().nullable(),
   description: z.string().min(1).nullable(),
   done: z.boolean().default(false),
-  complexity: z.int().max(3).min(1),
+  complexity: z.int().max(5).min(1),
 });
 
 export type Task = z.infer<typeof TaskSchema>;
